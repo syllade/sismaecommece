@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Services\CommissionService;
+use Illuminate\Console\Command;
+
+class CheckOverdueCommissions extends Command
+{
+    protected $signature = 'commissions:check-overdue';
+    protected $description = 'Check and mark overdue supplier commissions';
+
+    public function handle(CommissionService $commissionService)
+    {
+        $this->info('Checking for overdue commissions...');
+        
+        $count = $commissionService->markOverdue();
+        
+        if ($count > 0) {
+            $this->info("Marked {$count} commissions as overdue");
+            
+            // Get suppliers with overdue for notification
+            $suppliers = $commissionService->getSuppliersWithOverdue();
+            foreach ($suppliers as $supplier) {
+                $this->warn("Supplier {$supplier['supplier_id']} has {$supplier['total_overdue']} XOF overdue");
+            }
+        } else {
+            $this->info('No overdue commissions found');
+        }
+        
+        return 0;
+    }
+}

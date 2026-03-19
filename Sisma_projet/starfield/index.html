@@ -1,0 +1,400 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calming Interactive Starfield</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      cursor: none;
+    }
+    canvas {
+      display: block;
+    }
+    #cursor-glow {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(180, 200, 255, 0.6) 0%, rgba(100, 140, 255, 0.2) 40%, transparent 70%);
+      z-index: 10;
+      mix-blend-mode: screen;
+      transition: width 0.3s, height 0.3s;
+    }
+    #info {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(150, 170, 220, 0.5);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      pointer-events: none;
+      z-index: 10;
+      text-transform: uppercase;
+      animation: fadeIn 3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <div id="cursor-glow"></div>
+  <div id="info">move your mouse to drift through the stars</div>
+
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    const cursorGlow = document.getElementById('cursor-glow');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    // Mouse state
+    const mouse = {
+      x: width / 2,
+      y: height / 2,
+      prevX: width / 2,
+      prevY: height / 2,
+      vx: 0,
+      vy: 0,
+      speed: 0,
+      active: false
+    };
+
+    // Star configuration
+    const STAR_COUNT = 800;
+    const NEBULA_COUNT = 5;
+    const SHOOTING_STAR_CHANCE = 0.002;
+
+    // Color palettes for a calming feel
+    const starColors = [
+      { r: 200, g: 220, b: 255 },  // cool white-blue
+      { r: 255, g: 240, b: 220 },  // warm white
+      { r: 180, g: 200, b: 255 },  // soft blue
+      { r: 220, g: 200, b: 255 },  // soft lavender
+      { r: 255, g: 220, b: 200 },  // soft peach
+      { r: 200, g: 255, b: 240 },  // soft mint
+    ];
+
+    // Stars
+    class Star {
+      constructor() {
+        this.reset();
+        // Start at random depth for initial spread
+        this.z = Math.random() * 1500;
+      }
+
+      reset() {
+        this.x = (Math.random() - 0.5) * 2000;
+        this.y = (Math.random() - 0.5) * 2000;
+        this.z = 1500;
+        this.baseSpeed = 0.1 + Math.random() * 0.3;
+        const color = starColors[Math.floor(Math.random() * starColors.length)];
+        this.r = color.r;
+        this.g = color.g;
+        this.b = color.b;
+        this.twinkleSpeed = 0.5 + Math.random() * 2;
+        this.twinkleOffset = Math.random() * Math.PI * 2;
+        this.size = 0.5 + Math.random() * 1.5;
+      }
+
+      update(time) {
+        // Drift based on mouse velocity (gentle parallax)
+        const parallaxFactor = (1500 - this.z) / 1500;
+        this.x -= mouse.vx * 0.3 * parallaxFactor;
+        this.y -= mouse.vy * 0.3 * parallaxFactor;
+
+        // Slow forward drift
+        this.z -= this.baseSpeed + mouse.speed * 0.05;
+
+        if (this.z <= 0) {
+          this.reset();
+        }
+
+        // Wrap around if too far off screen
+        const screenX = (this.x / this.z) * 400 + width / 2;
+        const screenY = (this.y / this.z) * 400 + height / 2;
+        if (screenX < -100 || screenX > width + 100 || screenY < -100 || screenY > height + 100) {
+          if (this.z < 500) this.reset();
+        }
+      }
+
+      draw(time) {
+        const scale = 400 / this.z;
+        const screenX = this.x * scale + width / 2;
+        const screenY = this.y * scale + height / 2;
+
+        if (screenX < -10 || screenX > width + 10 || screenY < -10 || screenY > height + 10) return;
+
+        const depth = 1 - this.z / 1500;
+        const twinkle = 0.5 + 0.5 * Math.sin(time * this.twinkleSpeed + this.twinkleOffset);
+        const alpha = depth * (0.3 + 0.7 * twinkle);
+        const radius = this.size * scale * 0.8;
+
+        if (radius < 0.1) return;
+
+        // Glow
+        const glowRadius = radius * 3;
+        const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, glowRadius);
+        gradient.addColorStop(0, `rgba(${this.r}, ${this.g}, ${this.b}, ${alpha})`);
+        gradient.addColorStop(0.3, `rgba(${this.r}, ${this.g}, ${this.b}, ${alpha * 0.4})`);
+        gradient.addColorStop(1, `rgba(${this.r}, ${this.g}, ${this.b}, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, glowRadius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Core
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, Math.max(radius * 0.4, 0.3), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+        ctx.fill();
+      }
+    }
+
+    // Nebula clouds
+    class Nebula {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = 150 + Math.random() * 300;
+        this.color = starColors[Math.floor(Math.random() * starColors.length)];
+        this.alpha = 0.01 + Math.random() * 0.02;
+        this.driftX = (Math.random() - 0.5) * 0.1;
+        this.driftY = (Math.random() - 0.5) * 0.1;
+        this.pulseSpeed = 0.2 + Math.random() * 0.3;
+        this.pulseOffset = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.x += this.driftX - mouse.vx * 0.05;
+        this.y += this.driftY - mouse.vy * 0.05;
+
+        // Wrap
+        if (this.x < -this.radius) this.x = width + this.radius;
+        if (this.x > width + this.radius) this.x = -this.radius;
+        if (this.y < -this.radius) this.y = height + this.radius;
+        if (this.y > height + this.radius) this.y = -this.radius;
+      }
+
+      draw(time) {
+        const pulse = 0.7 + 0.3 * Math.sin(time * this.pulseSpeed + this.pulseOffset);
+        const alpha = this.alpha * pulse;
+
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha})`);
+        gradient.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.3})`);
+        gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+    }
+
+    // Shooting stars
+    class ShootingStar {
+      constructor() {
+        this.active = false;
+      }
+
+      trigger() {
+        this.active = true;
+        this.x = Math.random() * width;
+        this.y = Math.random() * height * 0.5;
+        const angle = Math.PI * 0.15 + Math.random() * Math.PI * 0.2;
+        const speed = 8 + Math.random() * 6;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.life = 1;
+        this.decay = 0.01 + Math.random() * 0.015;
+        this.length = 60 + Math.random() * 80;
+      }
+
+      update() {
+        if (!this.active) return;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= this.decay;
+        if (this.life <= 0) this.active = false;
+      }
+
+      draw() {
+        if (!this.active) return;
+
+        const tailX = this.x - this.vx * (this.length / 10);
+        const tailY = this.y - this.vy * (this.length / 10);
+
+        const gradient = ctx.createLinearGradient(tailX, tailY, this.x, this.y);
+        gradient.addColorStop(0, `rgba(200, 220, 255, 0)`);
+        gradient.addColorStop(0.7, `rgba(200, 220, 255, ${this.life * 0.3})`);
+        gradient.addColorStop(1, `rgba(255, 255, 255, ${this.life * 0.8})`);
+
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // Head glow
+        const headGlow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 4);
+        headGlow.addColorStop(0, `rgba(255, 255, 255, ${this.life * 0.8})`);
+        headGlow.addColorStop(1, `rgba(200, 220, 255, 0)`);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = headGlow;
+        ctx.fill();
+      }
+    }
+
+    // Initialize
+    const stars = Array.from({ length: STAR_COUNT }, () => new Star());
+    const nebulae = Array.from({ length: NEBULA_COUNT }, () => new Nebula());
+    const shootingStar = new ShootingStar();
+
+    // Background gradient (deep space)
+    function drawBackground() {
+      const gradient = ctx.createRadialGradient(
+        width / 2, height / 2, 0,
+        width / 2, height / 2, Math.max(width, height) * 0.7
+      );
+      gradient.addColorStop(0, '#0a0e1a');
+      gradient.addColorStop(0.5, '#060a14');
+      gradient.addColorStop(1, '#020408');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    // Mouse proximity glow on canvas
+    function drawMouseGlow() {
+      if (!mouse.active) return;
+      const radius = 120 + mouse.speed * 2;
+      const alpha = 0.03 + mouse.speed * 0.001;
+      const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, radius);
+      gradient.addColorStop(0, `rgba(140, 170, 255, ${Math.min(alpha, 0.08)})`);
+      gradient.addColorStop(1, 'rgba(140, 170, 255, 0)');
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+    }
+
+    // Animation loop
+    let lastTime = 0;
+    function animate(timestamp) {
+      const time = timestamp * 0.001;
+      const dt = Math.min((timestamp - lastTime) * 0.001, 0.05);
+      lastTime = timestamp;
+
+      // Smooth mouse velocity
+      mouse.vx += (mouse.x - mouse.prevX - mouse.vx) * 0.1;
+      mouse.vy += (mouse.y - mouse.prevY - mouse.vy) * 0.1;
+      mouse.speed = Math.sqrt(mouse.vx * mouse.vx + mouse.vy * mouse.vy);
+      mouse.prevX = mouse.x;
+      mouse.prevY = mouse.y;
+
+      // Dampen velocity
+      mouse.vx *= 0.95;
+      mouse.vy *= 0.95;
+
+      drawBackground();
+
+      // Nebulae (behind stars)
+      nebulae.forEach(n => {
+        n.update();
+        n.draw(time);
+      });
+
+      // Stars
+      stars.forEach(s => {
+        s.update(time);
+        s.draw(time);
+      });
+
+      // Shooting star
+      if (!shootingStar.active && Math.random() < SHOOTING_STAR_CHANCE) {
+        shootingStar.trigger();
+      }
+      shootingStar.update();
+      shootingStar.draw();
+
+      // Mouse glow
+      drawMouseGlow();
+
+      requestAnimationFrame(animate);
+    }
+
+    // Event listeners
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+
+      cursorGlow.style.left = e.clientX + 'px';
+      cursorGlow.style.top = e.clientY + 'px';
+
+      // Scale cursor glow with speed
+      const speed = Math.sqrt(
+        (e.clientX - mouse.prevX) ** 2 + (e.clientY - mouse.prevY) ** 2
+      );
+      const size = 30 + Math.min(speed * 0.5, 40);
+      cursorGlow.style.width = size + 'px';
+      cursorGlow.style.height = size + 'px';
+    });
+
+    window.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    window.addEventListener('mouseenter', () => {
+      mouse.active = true;
+    });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Touch support
+    window.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      mouse.x = touch.clientX;
+      mouse.y = touch.clientY;
+      mouse.active = true;
+      cursorGlow.style.left = touch.clientX + 'px';
+      cursorGlow.style.top = touch.clientY + 'px';
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+      mouse.active = false;
+    });
+
+    // Fade in info text then fade out
+    const info = document.getElementById('info');
+    setTimeout(() => {
+      info.style.transition = 'opacity 3s ease-out';
+      info.style.opacity = '0';
+    }, 6000);
+
+    // Start
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

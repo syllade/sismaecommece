@@ -1,0 +1,225 @@
+# Kubernetes Deployment for Horizontal Scaling
+# Deploy with: kubectl apply -f k8s/
+
+---
+# Kubernetes Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fashop-api
+  labels:
+    app: fashop-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: fashop-api
+
+---
+# Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fashop-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fashop-api
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fashop-api
+  labels:
+    app: fashop-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fashop-api
+  template:
+    metadata:
+      labels:
+        app: fashop-api
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: fashop-api
+                topologyKey: kubernetes.io/hostname
+      
+      containers:
+        - name: fashop-api
+          image: fashop/api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+          
+          env:
+            - name: APP_ENV
+              value: "production"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: fashop-config
+                  key: db_host
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fashop-secrets
+                  key: db_password
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: fashop-config
+                  key: redis_host
+            - name: CACHE_DRIVER
+              value: "redis"
+            - name: QUEUE_CONNECTION
+              value: "redis"
+          
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/storage
+      
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: fashop-storage
+
+---
+# Pod Disruption Budget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fashop-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: fashop-api
+
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fashop-config
+data:
+  db_host: "fashop-mysql-master"
+  redis_host: "fashop-redis"
+  app_url: "https://api.fashop.com"
+
+---
+# Secrets
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fashop-secrets
+type: Opaque
+stringData:
+  db_password: "CHANGE_ME"
+  redis_password: "CHANGE_ME"
+  app_key: "CHANGE_ME"
+  pusher_app_secret: "CHANGE_ME"
+
+---
+# Ingress with rate limiting
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fashop-api-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "20M"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-connections: "50"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - api.fashop.com
+      secretName: fashop-tls
+  rules:
+    - host: api.fashop.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fashop-api
+                port:
+                  number: 80

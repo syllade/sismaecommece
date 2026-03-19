@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sisma Market - Super Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D81918",
+                        "accent-orange": "#F7941D",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: rgba(216, 25, 24, 0.1);
+            color: #D81918;
+            border-right: 3px solid #D81918;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col sticky top-0 h-screen overflow-y-auto">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">S</div>
+<div>
+<h1 class="font-bold text-lg leading-tight">Sisma Market</h1>
+<p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Super Admin</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="text-[10px] font-bold text-slate-400 uppercase px-3 py-2 mt-4">Main Menu</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<div>
+<button class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">shopping_bag</span>
+<span class="text-sm font-medium">Orders</span>
+</div>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<div class="pl-10 space-y-1 mt-1">
+<a class="block py-1.5 text-xs text-slate-500 hover:text-primary transition-colors" href="#">Create Order</a>
+<a class="block py-1.5 text-xs text-slate-500 hover:text-primary transition-colors" href="#">QR Code Scanner</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+<span class="text-sm font-medium">Products</span>
+</a>
+<div>
+<button class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Suppliers</span>
+</div>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<div class="pl-10 space-y-1 mt-1">
+<a class="block py-1.5 text-xs text-slate-500 hover:text-primary transition-colors" href="#">Pending Approval</a>
+<a class="block py-1.5 text-xs text-slate-500 hover:text-primary transition-colors" href="#">Performance</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+<span class="text-sm font-medium">Drivers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">public</span>
+<span class="text-sm font-medium">Logistics</span>
+</a>
+<div class="text-[10px] font-bold text-slate-400 uppercase px-3 py-2 mt-6">Insights &amp; Tools</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">campaign</span>
+<span class="text-sm font-medium">Marketing</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">bar_chart</span>
+<span class="text-sm font-medium">Reporting</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">security</span>
+<span class="text-sm font-medium">Risk Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="flex items-center gap-3 px-3 py-2 w-full text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between sticky top-0 z-10">
+<h2 class="text-lg font-bold text-slate-800 dark:text-slate-100">Super Admin Dashboard</h2>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="bg-slate-100 dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-2 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search..." type="text"/>
+</div>
+<div class="flex items-center gap-4 border-l border-slate-200 dark:border-slate-800 pl-6">
+<button class="relative p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<div class="flex items-center gap-3 ml-2">
+<div class="flex flex-col items-end">
+<span class="text-sm font-bold leading-none">John Doe</span>
+<span class="text-[10px] text-slate-500 uppercase font-semibold">Super Admin</span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-accent-orange/10 text-accent-orange border border-accent-orange/20 flex items-center justify-center font-bold">JD</div>
+</div>
+</div>
+</div>
+</header>
+<main class="p-8 space-y-8">
+<!-- KPI Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Total Orders</p>
+<h3 class="text-2xl font-bold mt-1">12,840</h3>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-accent-orange/10 rounded-lg text-accent-orange">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">+8.2%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Global Revenue</p>
+<h3 class="text-2xl font-bold mt-1">45.2M <span class="text-sm text-slate-400 font-normal">FCFA</span></h3>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-red-100 rounded-lg text-red-600">
+<span class="material-symbols-outlined">inventory</span>
+</div>
+<span class="text-red-500 text-xs font-bold bg-red-50 dark:bg-red-500/10 px-2 py-1 rounded-full">-3.1%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Out of Stock</p>
+<h3 class="text-2xl font-bold mt-1">142</h3>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-slate-100 rounded-lg text-slate-600">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<span class="text-amber-500 text-xs font-bold bg-amber-50 dark:bg-amber-500/10 px-2 py-1 rounded-full">+5.4%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Unassigned Orders</p>
+<h3 class="text-2xl font-bold mt-1">86</h3>
+</div>
+</div>
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Revenue Evolution -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="font-bold text-lg">Real-time Revenue Evolution</h4>
+<p class="text-sm text-slate-500">Track financial growth across all markets</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 rounded-lg">Day</button>
+<button class="px-3 py-1.5 text-xs font-bold bg-primary text-white rounded-lg shadow-lg shadow-primary/20">Week</button>
+<button class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 rounded-lg">Month</button>
+</div>
+</div>
+<div class="h-64 flex flex-col justify-between">
+<svg fill="none" height="100%" preserveaspectratio="none" viewbox="0 0 1000 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#D81918" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#D81918" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,250 Q100,240 200,180 T400,140 T600,190 T800,80 T1000,110 L1000,300 L0,300 Z" fill="url(#chartGradient)"></path>
+<path d="M0,250 Q100,240 200,180 T400,140 T600,190 T800,80 T1000,110" fill="none" stroke="#D81918" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<div class="flex justify-between px-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-xs text-slate-400 font-medium">Mon</span>
+<span class="text-xs text-slate-400 font-medium">Tue</span>
+<span class="text-xs text-slate-400 font-medium">Wed</span>
+<span class="text-xs text-slate-400 font-medium">Thu</span>
+<span class="text-xs text-slate-400 font-medium">Fri</span>
+<span class="text-xs text-slate-400 font-medium">Sat</span>
+<span class="text-xs text-slate-400 font-medium">Sun</span>
+</div>
+</div>
+</div>
+<!-- Order Breakdown -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
+<h4 class="font-bold text-lg mb-6">Status Breakdown</h4>
+<div class="flex-1 flex flex-col justify-center gap-6">
+<div class="relative w-48 h-48 mx-auto">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle class="stroke-slate-100 dark:stroke-slate-800" cx="18" cy="18" fill="none" r="16" stroke-width="3.5"></circle>
+<circle cx="18" cy="18" fill="none" r="16" stroke="#D81918" stroke-dasharray="65, 100" stroke-linecap="round" stroke-width="3.5"></circle>
+<circle cx="18" cy="18" fill="none" r="16" stroke="#F7941D" stroke-dasharray="25, 100" stroke-dashoffset="-65" stroke-linecap="round" stroke-width="3.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold">12.8k</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Total</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Delivered</span>
+<span class="text-[10px] text-slate-500">65% (8,346)</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-accent-orange"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">In Transit</span>
+<span class="text-[10px] text-slate-500">25% (3,210)</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-slate-300"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Pending</span>
+<span class="text-[10px] text-slate-500">10% (1,284)</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-red-400"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Cancelled</span>
+<span class="text-[10px] text-slate-500">2% (256)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+<!-- Notifications Feed -->
+<div class="xl:col-span-1 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-bold text-lg">Real-time Feed</h4>
+<span class="material-symbols-outlined text-slate-400">more_horiz</span>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-emerald-500 mt-2 shrink-0"></div>
+<div>
+<p class="text-sm font-semibold leading-tight">New Supplier Approval</p>
+<p class="text-xs text-slate-500 mt-1">Gourmet Farms requested access to regional market.</p>
+<span class="text-[10px] text-slate-400 mt-1 block">2 mins ago</span>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-primary mt-2 shrink-0"></div>
+<div>
+<p class="text-sm font-semibold leading-tight">Stock Alert: Regional Hub A</p>
+<p class="text-xs text-slate-500 mt-1">Rice category below 15% threshold.</p>
+<span class="text-[10px] text-slate-400 mt-1 block">15 mins ago</span>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-accent-orange mt-2 shrink-0"></div>
+<div>
+<p class="text-sm font-semibold leading-tight">Driver Scan Success</p>
+<p class="text-xs text-slate-500 mt-1">Package #7441 delivered by Driver Mike.</p>
+<span class="text-[10px] text-slate-400 mt-1 block">45 mins ago</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">View All Activities</button>
+</div>
+<!-- Quick Access Cards -->
+<div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-primary/5 border border-primary/20 p-6 rounded-xl flex flex-col justify-between group hover:bg-primary transition-all duration-300">
+<div>
+<span class="material-symbols-outlined text-primary group-hover:text-white transition-colors mb-4 block text-3xl">storefront</span>
+<h5 class="text-lg font-bold group-hover:text-white transition-colors">Supplier Management</h5>
+<p class="text-sm text-slate-600 group-hover:text-white/80 transition-colors mt-2">Oversee 2,400+ active suppliers and pending applications.</p>
+</div>
+<a class="mt-8 flex items-center gap-2 text-primary group-hover:text-white text-sm font-bold transition-colors" href="#">
+                                Go to Module <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+<div class="bg-accent-orange/5 border border-accent-orange/20 p-6 rounded-xl flex flex-col justify-between group hover:bg-accent-orange transition-all duration-300">
+<div>
+<span class="material-symbols-outlined text-accent-orange group-hover:text-white transition-colors mb-4 block text-3xl">local_shipping</span>
+<h5 class="text-lg font-bold group-hover:text-white transition-colors">Delivery Management</h5>
+<p class="text-sm text-slate-600 group-hover:text-white/80 transition-colors mt-2">Track real-time delivery status and driver performance metrics.</p>
+</div>
+<a class="mt-8 flex items-center gap-2 text-accent-orange group-hover:text-white text-sm font-bold transition-colors" href="#">
+                                Go to Module <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl flex flex-col justify-between group hover:bg-slate-900 transition-all duration-300">
+<div>
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300 group-hover:text-white transition-colors mb-4 block text-3xl">map</span>
+<h5 class="text-lg font-bold group-hover:text-white transition-colors">Logistics Dashboard</h5>
+<p class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-white/80 transition-colors mt-2">Heatmaps and logistical optimization tools for hub routing.</p>
+</div>
+<a class="mt-8 flex items-center gap-2 text-slate-700 dark:text-slate-300 group-hover:text-white text-sm font-bold transition-colors" href="#">
+                                Go to Module <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl flex flex-col justify-between group hover:border-primary transition-all duration-300">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">ads_click</span>
+<div class="bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded text-[10px] font-bold">LIVE</div>
+</div>
+<h5 class="text-lg font-bold">Marketing CPC</h5>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Current campaign performance: 4.2% CTR across active ads.</p>
+</div>
+<a class="mt-8 flex items-center gap-2 text-primary text-sm font-bold" href="#">
+                                Campaign Manager <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="text-sm text-slate-500">© 2024 Sisma Market. All rights reserved.</p>
+<div class="flex items-center gap-8">
+<a class="text-xs font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-xs font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Compliance Guidelines</a>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
