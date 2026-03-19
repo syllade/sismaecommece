@@ -1,0 +1,239 @@
+Parfait.
+Voici **LE PROMPT COMPLET, FINAL, PROPRE**, prêt à **copier–coller tel quel dans BOLT**.
+Pas de flou. Pas de mélange. **Front admin uniquement. Laravel = le cerveau.**
+
+---
+
+# 🚀 PROMPT OFFICIEL — FRONTEND ADMIN FASHOP (POUR BOLT)
+
+> Tu es un **développeur Frontend senior (20+ ans d’expérience)** spécialisé en **interfaces d’administration modernes**, **UX avancée**, **responsive design** et **applications connectées à des API REST**.
+>
+> Tu dois développer **UNIQUEMENT l’INTERFACE D’ADMINISTRATION FRONTEND** du projet e-commerce **Fashop**.
+
+---
+
+## 🎯 RÈGLE D’OR (NON NÉGOCIABLE)
+
+⚠️ **TOUTE LA LOGIQUE MÉTIER EST GÉRÉE PAR LARAVEL**
+
+Le frontend admin :
+
+* ❌ ne fait AUCUN calcul métier
+* ❌ ne valide AUCUNE règle business
+* ❌ ne décide de RIEN
+* ❌ n’implémente PAS d’auth réelle
+* ❌ n’utilise PAS Supabase
+* ❌ n’utilise PAS de backend Node
+
+👉 Le frontend :
+
+* affiche les données
+* envoie les formulaires
+* consomme des endpoints REST Laravel
+* gère uniquement l’UI (loading, error, success)
+
+---
+
+## 🧱 STACK TECHNIQUE OBLIGATOIRE
+
+* React 18 + TypeScript
+* Tailwind CSS
+* shadcn/ui (Radix UI)
+* TanStack Query (préparé pour API Laravel)
+* Zustand (état UI simple si nécessaire)
+* Recharts ou Chart.js (statistiques)
+* Routing admin séparé
+
+---
+
+## 🧭 ARCHITECTURE DU FRONT ADMIN
+
+```
+/admin
+├── layout
+│   ├── AdminLayout.tsx
+│   ├── Sidebar.tsx
+│   └── Header.tsx
+├── pages
+│   ├── Dashboard
+│   ├── Products
+│   ├── Categories
+│   ├── Orders
+│   ├── Testimonials
+│   ├── Settings
+│   │   ├── SocialLinks
+│   │   └── Banner
+│   └── Analytics
+├── components
+│   ├── tables
+│   ├── forms
+│   ├── modals
+│   └── ui
+├── hooks
+│   ├── useAdminProducts
+│   ├── useAdminCategories
+│   ├── useAdminOrders
+│   ├── useAdminSettings
+│   ├── useAdminAnalytics
+│   └── useAdminTestimonials
+└── types
+```
+
+Tous les hooks doivent être **PRÊTS à consommer une API Laravel REST**.
+
+---
+
+## 🧩 FONCTIONNALITÉS À IMPLÉMENTER
+
+### 1️⃣ Dashboard (`/admin/dashboard`)
+
+* Cards statistiques :
+
+  * Total commandes
+  * Chiffre d’affaires
+  * Commandes en attente
+  * Produits actifs
+* Graphiques :
+
+  * Ventes par période
+  * Top produits
+* UI claire, lisible, moderne
+
+---
+
+### 2️⃣ Gestion des Produits (`/admin/products`)
+
+* Tableau :
+
+  * Nom
+  * Catégorie
+  * Prix
+  * Réduction
+  * Statut
+  * Actions (éditer, désactiver, supprimer)
+* Recherche, filtres, pagination
+* Formulaire création / édition :
+
+  * Nom
+  * Description
+  * Catégorie
+  * Prix (FCFA)
+  * Image (URL ou upload)
+  * Réduction %
+  * Toggle actif/inactif
+* Confirmation avant suppression
+  ⚠️ Aucune validation métier côté front (Laravel s’en charge)
+
+---
+
+### 3️⃣ Gestion des Catégories (`/admin/categories`)
+
+* CRUD visuel
+* Slug affiché (fourni par API)
+* Nombre de produits par catégorie
+
+---
+
+### 4️⃣ Gestion des Commandes (`/admin/orders`)
+
+* Tableau :
+
+  * Client
+  * Téléphone
+  * Montant
+  * Statut (badge coloré)
+  * Date
+* Filtres (statut, date)
+* Détail commande :
+
+  * Infos client
+  * Produits
+  * Total
+  * Livraison
+* Changement de statut (dropdown → API Laravel)
+
+---
+
+### 5️⃣ Témoignages (`/admin/testimonials`)
+
+* CRUD complet
+* Note étoilée
+* Activation / désactivation
+* Avatar avec initiales
+
+---
+
+### 6️⃣ Paramètres du site (`/admin/settings`)
+
+#### Réseaux sociaux
+
+* WhatsApp
+* Facebook
+* TikTok
+* Champs éditables
+* Bouton “Tester le lien”
+
+#### Bannière publicitaire
+
+* Texte principal
+* Texte secondaire
+* Pourcentage
+* Toggle actif/inactif
+* Aperçu visuel
+
+---
+
+### 7️⃣ Statistiques (`/admin/analytics`)
+
+* Graphiques :
+
+  * Ventes
+  * Produits
+  * Catégories
+* Filtres par période
+* Boutons export (UI only)
+
+---
+
+## 🎨 DESIGN & UX
+
+* Sidebar fixe (collapsible sur mobile)
+* Layout admin professionnel
+* Couleur principale : Orange Fashop
+* Tables lisibles
+* Modals propres
+* Toasts succès / erreur
+* Loading states partout
+* Mobile-first réel
+
+---
+
+## 🔐 AUTH (FRONT READY UNIQUEMENT)
+
+* Prévoir :
+
+  * `/admin/login`
+  * Protection des routes (mock)
+* ❌ Pas d’auth réelle
+* ✅ Prêt pour JWT / session Laravel
+
+---
+
+## 🧪 DONNÉES
+
+* Utiliser des données mockées
+* Simuler appels API
+* Simuler loading / error
+* AUCUNE règle métier inventée côté frontend
+
+---
+
+## ✅ LIVRABLE ATTENDU
+
+* Interface Admin complète
+* Code clair, structuré, maintenable
+* UX moderne et fluide
+* Responsive
+* Prête à être branchée sur une API Laravel
+
+---

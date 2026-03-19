@@ -1,0 +1,261 @@
+1. Présentation générale
+
+Fashop est un site e-commerce ultra simple, destiné à la vente de petits articles pour la maison et  les perti produit. Le site ne propose aucun paiement en ligne et aucune création de compte client on peut partager les produit et voir les detail dui produite ensuite passer notre commange .
+
+L’objectif est clair : ➡️ montrer les produits ➡️ permettre aux clients d’ajouter au panier ➡️ passer commande facilement ➡️ tout centraliser côté admin
+
+Un site beau, rapide, intuitif, pensé pour des utilisateurs peu à l’aise avec le digital.
+
+2. Objectifs du site
+
+Faciliter la prise de commande sans friction
+
+Éviter toute validation de commande via WhatsApp
+
+Centraliser les commandes dans un tableau admin
+
+Mettre en avant les produits et le design
+
+Favoriser le partage des produits sur les réseaux sociaux
+
+Améliorer la visibilité via le SEO
+
+3. Fonctionnalités côté client (Frontend)
+
+3.1 Page d’accueil
+
+Présentation claire de la boutique
+
+Produits vedettes mis en avant
+
+Barre de recherche produits visible dès l’accueil
+
+Accès rapide au panier
+
+Icônes réseaux sociaux visibles (TikTok, WhatsApp, Facebook)
+
+3.2 Recherche et navigation
+
+Recherche instantanée par nom de produit
+
+Navigation par catégories
+
+Catalogue simple et lisible
+
+Site entièrement en français
+
+3.3 Fiche produit
+
+Chaque fiche produit contient :
+
+Image du produit
+
+Nom
+
+Description courte
+
+Prix affiché en Franc CFA (FCFA)
+
+Bouton “Commander” visible directement
+
+Boutons de partage :
+
+WhatsApp
+
+Facebook
+
+TikTok
+
+3.4 Panier
+
+Ajout / suppression de produits
+
+Modification des quantités
+
+Récapitulatif clair :
+
+Produits
+
+Quantités
+
+Prix unitaire
+
+Total (FCFA)
+
+3.5 Passage de commande (sans compte)
+
+Formulaire simple avec :
+
+Nom
+
+Prénom
+
+Numéro de téléphone
+
+Lieu de livraison
+
+Type de livraison :
+
+Immédiate
+
+Programmée
+
+Date de livraison (si programmée)
+
+➡️ Validation de la commande directement sur le site ❌ Aucune redirection vers WhatsApp
+
+3.6 Réseaux sociaux
+
+Icônes visibles :
+
+en haut du site
+
+en bas du site (footer)
+
+Boutons “S’abonner” aux réseaux
+
+Partage des produits par les clients
+
+4. Fonctionnalités administrateur (Admin)
+
+4.1 Tableau de bord
+
+Vue globale des commandes
+
+Statuts :
+
+En attente
+
+En cours
+
+Livrée
+
+4.2 Gestion des catégories
+
+Création de catégories
+
+Modification des catégories
+
+Suppression des catégories
+
+👉 Un produit doit obligatoirement appartenir à une catégorie
+
+4.3 Gestion des produits
+
+Ajouter un produit dans une catégorie existante
+
+Modifier un produit
+
+Supprimer un produit
+
+Champs produit :
+
+Nom
+
+Description
+
+Prix (FCFA)
+
+Image
+
+Catégorie
+
+Statut (actif / inactif)
+
+4.4 Gestion des commandes
+
+Liste complète des commandes
+
+Détails client
+
+Détails produits commandés
+
+Changement du statut de commande
+
+Centralisation totale (aucune commande via WhatsApp)
+
+4.5 Gestion des réseaux sociaux
+
+Ajout / modification des liens :
+
+WhatsApp
+
+TikTok
+
+Facebook
+
+Activation ou désactivation de l’affichage
+
+4.6 SEO (Référencement)
+
+Gestion des titres SEO
+
+Descriptions SEO
+
+URLs propres
+
+Sitemap automatique
+
+Optimisation des images
+
+5. Design & UX
+
+Design ultra simple
+
+Moderne et élégant
+
+Mobile first
+
+Très intuitif
+
+Pas de surcharge visuelle
+
+Inspiration : sites e-commerce minimalistes et esthétiques
+
+🎨 Couleurs
+
+Orange (énergie, action)
+
+Blanc (clarté)
+
+Noir (élégance)
+
+Couleurs bien équilibrées et dynamiques
+
+6. Technique
+
+Site 100 % en français
+
+Prix affichés en FCFA
+
+SSL activé
+
+Hébergement : OVH Personal
+
+Architecture prévue :
+
+Frontend : réalisé séparément
+
+Admin Dashboard : dossier admin
+
+Backend Laravel : dossier backend
+
+7. Contraintes
+
+Aucun paiement en ligne
+
+Aucun compte client
+
+Site rapide et léger
+
+Utilisable par des personnes peu expérimentées en digital
+
+8. Vision future
+
+Le site doit être évolutif pour :
+
+Ajouter un paiement plus tard
+
+Ajouter des comptes clients si besoin
+
+Connecter d’autres outils marketing

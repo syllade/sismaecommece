@@ -1,0 +1,184 @@
+Cahier des Charges Front – Fournisseur ASHOP
+1️⃣ Objectif Général
+
+Créer un dashboard complet et une landing page pour les fournisseurs sur la marketplace ASHOP, permettant :
+
+Gestion des produits et variantes
+
+Suivi des commandes et attribution aux livreurs
+
+Utilisation d’un assistant IA pour générer des fiches produits optimisées SEO
+
+Visualisation des statistiques de ventes et alertes stock
+
+Inscription sécurisée via landing page et lien email
+
+2️⃣ Landing Page Fournisseur
+2.1 Hero Section
+
+Titre : "Vendez sur ASHOP et atteignez des milliers de clients !"
+
+Sous-titre : "Gérez vos produits, commandes et livraison depuis un seul dashboard."
+
+Image/illustration : fournisseur avec smartphone ou dashboard.
+
+CTA principal : “Créer mon compte fournisseur” → scroll vers formulaire.
+
+CTA secondaire : “Découvrir le dashboard” → scroll vers avantages.
+
+2.2 Avantages Clés (Feature Grid)
+
+Gestion de produits simples et variables
+
+Assistant IA pour SEO (titres, descriptions, bullet points, meta)
+
+Dashboard ventes / stock / alertes
+
+Attribution livreurs et suivi commandes
+
+2.3 Fonctionnement (Timeline)
+
+Étape 1 : Inscription → email sécurisé par admin
+
+Étape 2 : Ajout des produits (manuel ou import CSV/XLS + images)
+
+Étape 3 : Réception et traitement des commandes
+
+2.4 Formulaire d’inscription
+
+Champs :
+
+Nom du magasin
+
+Nom / prénom du responsable
+
+Email professionnel
+
+Téléphone
+
+Adresse complète (quartier / ville)
+
+Mot de passe (création via lien sécurisé admin)
+
+Consentement CGU / politique confidentialité
+
+Actions et interactions :
+
+Validation en temps réel
+
+CAPTCHA / reCAPTCHA
+
+Bouton : “Recevoir mon accès”
+
+2.5 Réseau & Témoignages
+
+Slider logos partenaires et livreurs
+
+Témoignages fournisseurs existants
+
+2.6 FAQ
+
+Délais activation
+
+Types de produits vendables
+
+Livraison et attribution
+
+Coûts / commissions
+
+2.7 Footer
+
+Contacts / support
+
+CGU, Politique confidentialité
+
+Réseaux sociaux
+
+Logo ASHOP
+
+3️⃣ Dashboard Fournisseur
+3.1 Tableau de bord principal
+
+Chiffre d’affaires : total, par jour/semaine/mois
+
+Commandes en attente : tri par date, sélection multiple
+
+Produits en rupture / stock faible
+
+Notifications système : alertes stock, promotions, validation produit
+
+3.2 Gestion des commandes
+
+Visualisation uniquement des commandes du fournisseur
+
+Tri par date (jour/semaine/mois)
+
+Sélection multiple pour mise à jour de statut groupée
+
+Attribution livreur (individuelle ou par lot)
+
+Statut possible : Préparée, Expédiée, Livrée
+
+3.3 Gestion du catalogue
+
+Produits simples et variables (couleur, taille)
+
+Stock et prix par variante
+
+Images multiples par produit
+
+Prix personnalisés par variante
+
+Bouton : Ajouter / Modifier / Supprimer produit
+
+3.4 Importation en masse
+
+CSV / XLS + ZIP d’images
+
+Prévisualisation avant validation
+
+3.5 Assistant IA pour produit
+
+Génération : titre, description longue, bullet points, meta description
+
+Entrées : image produit + mots-clés
+
+Paramètres : ton (luxe, technique, amical), longueur texte (court, moyen, long)
+
+Bouton : “Générer la fiche produit”
+
+3.6 Statistiques & Alertes
+
+Graphiques CA / commandes
+
+Alertes stock faible ou produits non validés
+
+Notifications en temps réel
+
+3.7 Paramètres & profil
+
+Modifier infos magasin / contact
+
+Mot de passe / accès
+
+Déconnexion
+
+4️⃣ Composants Front à Développer
+
+Landing Page : HeroSection, FeatureCard, TimelineStep, FormField, CTAButton, Carousel, Accordion, Footer
+
+Dashboard : DashboardHeader, OrdersTable (tri, sélection multiple), ProductCard, ProductForm, ImportCSV, AIContentGenerator, StatsGraph, AlertCard, NotificationToast
+
+Interactions : Hover effects, transitions fluides, responsive design mobile-first, lazy loading images
+
+5️⃣ Notes Techniques
+
+Couleurs et typographie : charte SISMA (Rouge Sisma #D81918, Orange #F7941D)
+
+Animations légères : fly-to-cart, transitions pages, hover effects
+
+Responsive : sm / md / lg / xl breakpoints
+
+SEO optimisé pour la landing page : title, meta description, alt images
+
+Performance : lazy loading, code splitting

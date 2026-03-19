@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guide Vendeur SISMA Pro</title>
+<!-- BEGIN: External Resources -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- END: External Resources -->
+<!-- BEGIN: Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sismaRed: '#D81918',
+            sismaOrange: '#F7941D',
+            sismaDark: '#1A1A1A',
+            sismaLight: '#F8F9FA'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="layout-styling">
+    body {
+      background-color: #E5E7EB;
+      -webkit-print-color-adjust: exact;
+    }
+    /* Page Break for PDF Simulation */
+    .page-break {
+      break-after: page;
+      margin-bottom: 2rem;
+    }
+    @media print {
+      .page-break {
+        margin-bottom: 0;
+      }
+      body {
+        background-color: white;
+      }
+    }
+    .pdf-page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+<style data-purpose="branding-elements">
+    .gradient-brand {
+      background: linear-gradient(135deg, #D81918 0%, #F7941D 100%);
+    }
+    .bullet-icon::before {
+      content: "✓";
+      color: #D81918;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+  </style>
+<!-- END: Custom Styles -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head>
+<body class="py-10">
+<!-- BEGIN: Page 1 - Cover -->
+<section class="pdf-page page-break flex flex-col justify-between" data-purpose="cover-page">
+<div class="h-4 gradient-brand w-full"></div>
+<div class="px-16 pt-20">
+<div class="flex items-center gap-3 mb-12">
+<div class="w-16 h-16 bg-sismaRed rounded-xl flex items-center justify-center text-white font-bold text-2xl">S</div>
+<span class="text-2xl font-extrabold tracking-tighter uppercase text-sismaDark">SISMA Marketplace</span>
+</div>
+<div class="max-w-2xl">
+<h2 class="text-sismaRed font-bold tracking-widest uppercase mb-4 text-lg">Elite Network Partner</h2>
+<h1 class="text-6xl font-extrabold text-sismaDark leading-tight mb-8">
+          Vendeur SISMA Pro : <br/>
+<span class="text-transparent bg-clip-text gradient-brand">Le Guide Complet de la Réussite</span>
+</h1>
+<p class="text-xl text-gray-600 leading-relaxed border-l-4 border-sismaOrange pl-6">
+          Optimisez votre boutique, boostez vos ventes et rejoignez les leaders du e-commerce en Afrique avec SISMA.
+        </p>
+</div>
+</div>
+<div class="relative h-96 w-full mt-10 overflow-hidden">
+<div class="absolute bottom-0 right-0 w-3/4 h-full gradient-brand rounded-tl-[100px] opacity-10"></div>
+<img alt="SISMA Dashboard Mockup" class="absolute bottom-0 right-10 w-4/5 shadow-2xl rounded-t-xl border-x-8 border-t-8 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuzkwQl44L88PJv7HgTSO_bun6cGzrFDyVFw9DXJGH7rRNItjdK39GEIuN6FF53csKFjHLtZwnF3daBrChKoJu2_oW3uwhU4l5z3r0sMw2FV92eseD4Wyvve59CuBZHf8Adnz38jJnxbPn2snBQf8ihKP58lAbS22guQ5t3cZmW9YfBBc7Q2pvQn0PZZ3BJQKrQeH7CqRq-NvKvKeLw3FBA1D07qG-xclPGL9GaH_IseJaAhLjDjCyrq1ZVI_aqAXo12qb9aHtQlFh"/>
+</div>
+<div class="px-16 pb-12 flex justify-between items-end">
+<div>
+<p class="text-sm text-gray-400 font-medium">Édition 2024</p>
+<p class="text-sm text-gray-400 font-medium">www.sismamarket.pro</p>
+</div>
+<div class="flex gap-4">
+<div class="h-2 w-12 bg-sismaRed"></div>
+<div class="h-2 w-12 bg-sismaOrange"></div>
+</div>
+</div>
+</section>
+<!-- END: Page 1 -->
+<!-- BEGIN: Page 2 - Introduction & Shop Mastery -->
+<section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-intro-shop">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">01 / Introduction &amp; Boutique</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 2: Introduction -->
+<div class="mb-16">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">2</span>
+        Bienvenue dans le réseau d'élite
+      </h2>
+<p class="text-gray-600 leading-relaxed text-lg mb-6">
+        Félicitations pour avoir choisi SISMA Marketplace. En tant que vendeur "Pro", vous accédez à un écosystème conçu pour la performance. Ce guide est votre feuille de route pour transformer votre inventaire en succès commercial.
+      </p>
+</div>
+<!-- Section 3: Master your Shop -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">3</span>
+        Maîtrisez votre Boutique
+      </h2>
+<div class="grid grid-cols-2 gap-8">
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaOrange">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">Branding Impactant</h3>
+<p class="text-gray-600 text-sm mb-4">Utilisez un logo haute résolution (500x500px) et une bannière attrayante pour instaurer la confiance dès le premier regard.</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li class="bullet-icon">Logo clair et lisible</li>
+<li class="bullet-icon">Bannière promotionnelle</li>
+</ul>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaRed">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">Description &amp; SEO</h3>
+<p class="text-gray-600 text-sm mb-4">Racontez votre histoire. Expliquez pourquoi vos produits sont uniques en utilisant des mots-clés pertinents.</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li class="bullet-icon">Mots-clés stratégiques</li>
+<li class="bullet-icon">Informations de contact</li>
+</ul>
+</div>
+</div>
+<!-- Content Visual -->
+<div class="mt-8 border border-gray-100 rounded-xl p-4 shadow-sm bg-white">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded bg-gray-200"></div>
+<div class="flex-1">
+<div class="h-3 w-48 bg-gray-200 rounded mb-2"></div>
+<div class="h-2 w-32 bg-gray-100 rounded"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="h-20 bg-gray-50 rounded border border-dashed border-gray-200 flex items-center justify-center text-[10px] text-gray-400">Produit 1</div>
+<div class="h-20 bg-gray-50 rounded border border-dashed border-gray-200 flex items-center justify-center text-[10px] text-gray-400">Produit 2</div>
+<div class="h-20 bg-gray-50 rounded border border-dashed border-gray-200 flex items-center justify-center text-[10px] text-gray-400">Produit 3</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 02</p>
+</div>
+</section>
+<!-- END: Page 2 -->
+<!-- BEGIN: Page 3 - Excellence & Logistics -->
+<section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-product-logistics">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">02 / Excellence &amp; Logistique</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaOrange rounded-full"></div>
+</div>
+</div>
+<!-- Section 4: Product Excellence -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">4</span>
+        Excellence Produit
+      </h2>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="p-4 border border-gray-100 rounded-xl">
+<div class="text-2xl mb-2">📸</div>
+<h4 class="font-bold text-sm mb-1 text-sismaDark">Photo HD</h4>
+<p class="text-xs text-gray-500">Fond blanc, éclairage naturel. 3 à 5 angles par produit.</p>
+</div>
+<div class="p-4 border border-gray-100 rounded-xl">
+<div class="text-2xl mb-2">✍️</div>
+<h4 class="font-bold text-sm mb-1 text-sismaDark">Titres SEO</h4>
+<p class="text-xs text-gray-500">[Marque] + [Modèle] + [Attribut principal].</p>
+</div>
+<div class="p-4 border border-gray-100 rounded-xl">
+<div class="text-2xl mb-2">📋</div>
+<h4 class="font-bold text-sm mb-1 text-sismaDark">Fiche Technique</h4>
+<p class="text-xs text-gray-500">Détaillez les dimensions, matériaux et garanties.</p>
+</div>
+</div>
+</div>
+<!-- Section 5: Logistics -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">5</span>
+        Gestion &amp; Logistique
+      </h2>
+<div class="relative pl-8 border-l-2 border-sismaRed space-y-8">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaRed border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">Réception de Commande</h4>
+<p class="text-sm text-gray-600">Notification en temps réel via App et Email. Validation requise sous 2 heures.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaOrange border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">Packaging Premium</h4>
+<p class="text-sm text-gray-600">Utilisez les standards SISMA. Protection maximale contre les chocs.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaRed border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">Handover Conducteur</h4>
+<p class="text-sm text-gray-600">Remise au livreur SISMA. Signature numérique pour confirmation de collecte.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 03</p>
+</div>
+</section>
+<!-- END: Page 3 -->
+<!-- BEGIN: Page 4 - Financials & Marketing -->
+<section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-financials-marketing">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">03 / Finance &amp; Marketing</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 6: Financials -->
+<div class="mb-16">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">6</span>
+        Finances &amp; Paiements
+      </h2>
+<div class="bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaRed opacity-20 blur-3xl"></div>
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="text-gray-400 text-sm mb-1 uppercase tracking-tighter">Commission Unique</p>
+<h3 class="text-5xl font-black text-sismaOrange">8%</h3>
+</div>
+<div class="text-right">
+<p class="text-gray-400 text-sm mb-1 uppercase tracking-tighter">Période de Payout</p>
+<h3 class="text-xl font-bold">72h Après Livraison</h3>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-gray-700 pt-6">
+<div class="flex flex-col items-center p-2">
+<div class="w-12 h-8 bg-white/10 rounded mb-2 flex items-center justify-center text-[10px] font-bold">ORANGE</div>
+<span class="text-[10px] text-gray-400">Disponible</span>
+</div>
+<div class="flex flex-col items-center p-2">
+<div class="w-12 h-8 bg-white/10 rounded mb-2 flex items-center justify-center text-[10px] font-bold text-yellow-400">MTN</div>
+<span class="text-[10px] text-gray-400">Disponible</span>
+</div>
+<div class="flex flex-col items-center p-2">
+<div class="w-12 h-8 bg-white/10 rounded mb-2 flex items-center justify-center text-[10px] font-bold text-blue-400">WAVE</div>
+<span class="text-[10px] text-gray-400">Disponible</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 7: Marketing & Growth -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">7</span>
+        Marketing &amp; Croissance
+      </h2>
+<div class="grid grid-cols-2 gap-6">
+<div class="border-2 border-sismaLight p-6 rounded-2xl hover:border-sismaOrange transition-colors">
+<h4 class="font-bold text-lg mb-2 text-sismaDark">Outils CPC (Coût Par Clic)</h4>
+<p class="text-sm text-gray-600">Propulsez vos produits en haut des résultats de recherche pour seulement quelques francs par clic.</p>
+</div>
+<div class="border-2 border-sismaLight p-6 rounded-2xl hover:border-sismaRed transition-colors">
+<h4 class="font-bold text-lg mb-2 text-sismaDark">Campagnes SMS</h4>
+<p class="text-sm text-gray-600">Ciblez directement vos clients fidèles avec des codes promos exclusifs via le CRM SISMA.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 04</p>
+</div>
+</section>
+<!-- END: Page 4 -->
+<!-- BEGIN: Page 5 - Support & Contact -->
+<!-- BEGIN: Page 5 - Customer Disputes -->
+<section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-disputes">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">04 / Relation Client &amp; Litiges</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaOrange rounded-full"></div>
+</div>
+</div>
+<!-- Section 8: Dispute Resolution -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">8</span>
+      Résolution des Litiges Clients
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Un conflit bien géré est une opportunité de fidélisation. SISMA intervient comme médiateur pour garantir une issue équitable entre vous et l'acheteur.
+    </p>
+<h3 class="font-bold text-sismaDark mb-6 uppercase text-sm tracking-widest">Processus de Médiation</h3>
+<div class="relative pl-8 border-l-2 border-sismaOrange space-y-8 mb-12">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaOrange border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">1. Ouverture du Dossier</h4>
+<p class="text-sm text-gray-600">Le client signale un problème via son interface. Vous recevez une notification immédiate avec les détails et preuves (photos/vidéos).</p>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaRed border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">2. Réponse du Vendeur (48h)</h4>
+<p class="text-sm text-gray-600">Proposez une solution : échange, remboursement partiel ou total. SISMA valide la cohérence avec la politique de retour.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-sismaOrange border-4 border-white"></div>
+<h4 class="font-bold text-sismaDark">3. Arbitrage Final</h4>
+<p class="text-sm text-gray-600">Sans accord amiable sous 72h, l'équipe Qualité SISMA tranche en se basant sur les preuves fournies par les deux parties.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-sismaLight p-6 rounded-2xl">
+<div class="text-xl mb-3">⚖️</div>
+<h4 class="font-bold text-sm mb-2 text-sismaDark uppercase tracking-tight">Vos Responsabilités</h4>
+<ul class="space-y-2 text-xs text-gray-700">
+<li class="bullet-icon">Authenticité stricte des produits</li>
+<li class="bullet-icon">Conformité à la fiche technique</li>
+<li class="bullet-icon">Respect des délais de réponse</li>
+</ul>
+</div>
+<div class="bg-sismaDark p-6 rounded-2xl text-white">
+<div class="text-xl mb-3">🛡️</div>
+<h4 class="font-bold text-sm mb-2 text-sismaOrange uppercase tracking-tight">Protection Vendeur</h4>
+<p class="text-[11px] leading-relaxed opacity-80">
+          SISMA vous protège contre les abus. Les retours pour "changement d'avis" sur les produits scellés ouverts ne sont pas acceptés.
+        </p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 05</p>
+</div>
+</section>
+<!-- END: Page 5 --><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-taxation">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">05 / Fiscalité &amp; Taxes</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 9: Taxation -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">9</span>
+      Fiscalité et Taxes en Côte d'Ivoire
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Le respect de la réglementation fiscale ivoirienne est essentiel pour la pérennité de votre activité sur SISMA. Voici les points clés à maîtriser.
+    </p>
+<div class="grid grid-cols-2 gap-8 mb-12">
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaRed">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">TVA (Taxe sur la Valeur Ajoutée)</h3>
+<p class="text-gray-600 text-sm mb-4">Le taux standard en Côte d'Ivoire est de 18%. Elle s'applique sur le prix de vente final de vos produits si vous êtes assujetti.</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li class="bullet-icon">Déclaration mensuelle</li>
+<li class="bullet-icon">Collecte sur les ventes</li>
+</ul>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaOrange">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">AIRSI (Secteur Informel)</h3>
+<p class="text-gray-600 text-sm mb-4">Pour les commerçants non-immatriculés au registre du commerce, un acompte (AIRSI) est prélevé conformément à la loi de finances.</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li class="bullet-icon">Précompte à la source</li>
+<li class="bullet-icon">Régularisation annuelle</li>
+</ul>
+</div>
+</div>
+<div class="mb-12">
+<h3 class="font-bold text-sismaDark mb-4 uppercase text-sm tracking-widest">Exigences de Facturation</h3>
+<div class="bg-white border-2 border-dashed border-gray-200 p-6 rounded-2xl">
+<p class="text-sm text-gray-600 mb-4">Toutes les transactions doivent faire l'objet d'une facture conforme aux standards de la <strong>DGI (Direction Générale des Impôts)</strong>. Elle doit mentionner :</p>
+<div class="grid grid-cols-2 gap-4 text-xs font-medium text-gray-500">
+<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-sismaRed rounded-full"></span> Numéro de Compte Contribuable (NCC)</div>
+<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-sismaRed rounded-full"></span> Détail des taxes (TVA/AIRSI)</div>
+<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-sismaRed rounded-full"></span> Adresse complète du siège social</div>
+<div class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-sismaRed rounded-full"></span> Date et numéro de facture unique</div>
+</div>
+</div>
+</div>
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaOrange opacity-10 blur-3xl"></div>
+<h4 class="font-bold text-sismaOrange mb-3 uppercase tracking-tighter">Le rôle de SISMA</h4>
+<p class="text-sm opacity-80 leading-relaxed">
+          SISMA Marketplace agit en tant que facilitateur. Nous fournissons des rapports de vente détaillés chaque mois pour simplifier vos déclarations. Veuillez noter que le paiement des impôts reste la responsabilité exclusive du vendeur.
+        </p>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 06</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-returns">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">07 / Retours Produits</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaOrange rounded-full"></div>
+</div>
+</div>
+<!-- Section 10: Product Returns -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">10</span>
+      Gestion des Retours Produits
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Une politique de retour claire renforce la confiance des acheteurs. Voici comment gérer efficacement les retours sur la plateforme.
+    </p>
+<!-- 1. Conditions de Retour -->
+<div class="mb-10">
+<h3 class="font-bold text-sismaDark mb-4 uppercase text-sm tracking-widest">Conditions de Retour</h3>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaRed">
+<ul class="space-y-3 text-sm text-gray-700">
+<li class="bullet-icon">Le produit doit être dans son <b>emballage d'origine</b>.</li>
+<li class="bullet-icon">L'article doit être <b>non utilisé</b> et dans son état initial.</li>
+<li class="bullet-icon">Le délai légal de retour est de <b>14 jours</b> après réception.</li>
+</ul>
+</div>
+</div>
+<!-- 2. Processus de Retour -->
+<div class="mb-10">
+<h3 class="font-bold text-sismaDark mb-6 uppercase text-sm tracking-widest">Processus de Retour</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="p-4 border border-gray-100 rounded-xl relative">
+<span class="absolute -top-3 left-4 bg-sismaRed text-white text-[10px] px-2 py-0.5 rounded-full">Étape 1</span>
+<h4 class="font-bold text-xs mb-2 mt-2">Initiation</h4>
+<p class="text-[11px] text-gray-500">L'acheteur lance la demande via son compte SISMA.</p>
+</div>
+<div class="p-4 border border-gray-100 rounded-xl relative">
+<span class="absolute -top-3 left-4 bg-sismaOrange text-white text-[10px] px-2 py-0.5 rounded-full">Étape 2</span>
+<h4 class="font-bold text-xs mb-2 mt-2">Notification</h4>
+<p class="text-[11px] text-gray-500">Vous recevez une alerte. Le produit est collecté par SISMA.</p>
+</div>
+<div class="p-4 border border-gray-100 rounded-xl relative">
+<span class="absolute -top-3 left-4 bg-sismaDark text-white text-[10px] px-2 py-0.5 rounded-full">Étape 3</span>
+<h4 class="font-bold text-xs mb-2 mt-2">Inspection</h4>
+<p class="text-[11px] text-gray-500">Vérification de l'état du produit à réception sous 48h.</p>
+</div>
+</div>
+</div>
+<!-- 3 & 4: Refund and Fees -->
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-white border border-gray-100 p-6 rounded-2xl">
+<h4 class="font-bold text-sm mb-3 text-sismaDark uppercase">Remboursements &amp; Échanges</h4>
+<p class="text-xs text-gray-600 mb-4">Le traitement s'effectue sous 5 jours ouvrés via :</p>
+<div class="flex gap-2 mb-2">
+<span class="px-2 py-1 bg-gray-100 text-[10px] rounded font-bold">MOBILE MONEY</span>
+<span class="px-2 py-1 bg-gray-100 text-[10px] rounded font-bold">AVOIR SISMA</span>
+</div>
+</div>
+<div class="bg-sismaDark p-6 rounded-2xl text-white">
+<h4 class="font-bold text-sm mb-3 text-sismaOrange uppercase">Frais de Retour</h4>
+<div class="space-y-2 text-[11px] opacity-90">
+<p>• <b>Produit défectueux :</b> Pris en charge par le vendeur.</p>
+<p>• <b>Changement d'avis :</b> Pris en charge par l'acheteur.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 07</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-penalties">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">08 / Excellence &amp; Ponctualité</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 11: Delivery Penalties -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">11</span>
+      Pénalités de Retard de Livraison
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Chez SISMA, la ponctualité est le pilier de la confiance. Tout retard (plus de 2h à 4h pour la validation ou non-respect du créneau de collecte) impacte l'expérience client et fait l'objet de mesures correctives.
+    </p>
+<!-- Penalty Levels -->
+<div class="grid grid-cols-1 gap-6 mb-12">
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-gray-400 flex items-start gap-6">
+<div class="w-12 h-12 bg-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-gray-400 border border-gray-200">L1</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">Niveau 1 : Avertissement</h4>
+<p class="text-sm text-gray-600">Premier rappel à l'ordre formel et réduction temporaire de la visibilité de vos produits dans les résultats de recherche.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaOrange flex items-start gap-6">
+<div class="w-12 h-12 bg-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sismaOrange border border-sismaOrange">L2</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">Niveau 2 : Amende Forfaitaire</h4>
+<p class="text-sm text-gray-600">Une pénalité fixe de <span class="font-bold text-sismaOrange">2 000 FCFA</span> est appliquée par commande en retard, déduite de votre prochain versement.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaRed flex items-start gap-6">
+<div class="w-12 h-12 bg-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sismaRed border border-sismaRed">L3</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">Niveau 3 : Suspension</h4>
+<p class="text-sm text-gray-600">En cas de retards répétés, votre boutique sera suspendue temporairement pour une période d'audit de 7 jours minimum.</p>
+</div>
+</div>
+</div>
+<!-- Emphasis Box -->
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaRed opacity-10 blur-3xl"></div>
+<p class="text-sm italic leading-relaxed text-center">
+        "Ces règles strictes ne sont pas des contraintes, mais des garanties. Elles visent à offrir un service de classe mondiale et à garantir la satisfaction totale de chaque client en Afrique."
+      </p>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 08</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-elite">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">09 / Récompenses &amp; Élite</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 12: Elite Rewards -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">12</span>
+      Récompenses et Élite SISMA
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      L'excellence mérite d'être récompensée. Le programme Élite SISMA offre des avantages exclusifs aux vendeurs qui maintiennent les plus hauts standards de service.
+    </p>
+<!-- Félicitations Visual -->
+<div class="gradient-brand p-8 rounded-3xl text-white mb-10 flex items-center justify-between">
+<div>
+<h3 class="text-3xl font-black mb-2">FÉLICITATIONS !</h3>
+<p class="opacity-90">Vous êtes sur la voie du succès. Visez l'excellence pour débloquer ces privilèges.</p>
+</div>
+<div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl shadow-inner">
+        🏆
+      </div>
+</div>
+<!-- Benefits Grid -->
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaRed">
+<div class="text-2xl mb-3">🏅</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-sm tracking-wide">Badge 'Vendeur Élite'</h4>
+<p class="text-xs text-gray-600">Bénéficiez d'une visibilité prioritaire et d'un badge de confiance sur toutes vos fiches produits.</p>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaOrange">
+<div class="text-2xl mb-3">📉</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-sm tracking-wide">Commission Réduite</h4>
+<p class="text-xs text-gray-600">Passez de 8% à <span class="font-bold text-sismaRed">6%</span> de commission pour toute note vendeur supérieure à 4.8/5.</p>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaOrange">
+<div class="text-2xl mb-3">🚀</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-sm tracking-wide">Accès Prioritaire</h4>
+<p class="text-xs text-gray-600">Placement en "Une" et accès anticipé aux grandes campagnes marketing saisonnières de SISMA.</p>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaRed">
+<div class="text-2xl mb-3">👤</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-sm tracking-wide">Account Manager Dédié</h4>
+<p class="text-xs text-gray-600">Un conseiller stratégique personnel pour le top 1% des vendeurs afin d'optimiser la croissance.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 09</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-referral">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">10 / Parrainage &amp; Croissance</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaOrange rounded-full"></div>
+</div>
+</div>
+<!-- Section 13: Referral Program -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">13</span>
+      Programme de Parrainage SISMA Pro
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Développez votre réseau et réduisez vos frais. Le programme de parrainage SISMA Pro vous permet de co-construire l'avenir du e-commerce avec vos pairs.
+    </p>
+<div class="grid grid-cols-2 gap-8 mb-10">
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaRed">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">1. Le Principe</h3>
+<p class="text-gray-600 text-sm mb-4">Invitez d'autres vendeurs professionnels à rejoindre la plateforme via votre lien unique de parrainage disponible sur votre interface.</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li class="bullet-icon">Lien unique &amp; personnel</li>
+<li class="bullet-icon">Invitation illimitée</li>
+</ul>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-t-4 border-sismaOrange">
+<h3 class="font-bold text-sismaDark mb-3 uppercase text-sm tracking-wide">2. Bonus Nouveau Vendeur</h3>
+<p class="text-gray-600 text-sm mb-4">Pour chaque nouvel inscrit via votre lien, SISMA offre un coup de pouce immédiat pour lancer son activité.</p>
+<div class="bg-white p-3 rounded-lg border border-sismaOrange/20">
+<span class="text-lg font-bold text-sismaOrange">5 000 FCFA</span>
+<p class="text-[10px] text-gray-400 uppercase">Crédit marketing offert</p>
+</div>
+</div>
+</div>
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden mb-10">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaRed opacity-20 blur-3xl"></div>
+<div class="flex justify-between items-center">
+<div class="max-w-md">
+<h3 class="font-bold text-sismaOrange mb-3 uppercase tracking-tighter">Récompenses pour le Parrain</h3>
+<p class="text-sm opacity-90 leading-relaxed">
+            Bénéficiez d'une réduction de commission de <span class="text-white font-bold">1.5%</span> sur vos propres ventes pendant <span class="text-white font-bold">3 mois</span> pour chaque parrainage réussi (après la première vente du filleul).
+          </p>
+</div>
+<div class="text-4xl text-white/20 font-black">1.5%</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="font-bold text-sismaDark mb-4 uppercase text-sm tracking-widest">Suivi &amp; Gestion</h3>
+<div class="bg-white border-2 border-dashed border-gray-200 p-6 rounded-2xl flex items-center gap-6">
+<div class="w-16 h-16 bg-sismaLight rounded-xl flex items-center justify-center">
+<span class="text-2xl text-sismaRed">📊</span>
+</div>
+<p class="text-sm text-gray-600">
+          Pilotez vos invitations et suivez l'état de vos bonus en temps réel via l'onglet <strong>"Parrainage"</strong> de votre tableau de bord vendeur.
+        </p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 10</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-vip-support">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">11 / Support VIP &amp; Accompagnement</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 14: VIP Support -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">14</span>
+      Support VIP &amp; Accompagnement Dédié
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Parce que votre temps est précieux, nous avons mis en place un service d'accompagnement sur-mesure pour nos partenaires les plus engagés.
+    </p>
+<!-- VIP Features Grid -->
+<div class="grid grid-cols-1 gap-6 mb-12">
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaRed flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-2xl shadow-sm">
+          📱
+        </div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">WhatsApp VIP</h4>
+<p class="text-sm text-gray-600">Une ligne directe et prioritaire pour un support instantané. Plus d'attente, vos demandes sont traitées en temps réel par nos experts.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaOrange flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-2xl shadow-sm">
+          🚚
+        </div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">Conciergerie Logistique</h4>
+<p class="text-sm text-gray-600">Une assistance dédiée pour vos enjeux complexes d'expédition ou de gestion de stock. Nous gérons les imprévus pour vous.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaDark flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-2xl shadow-sm">
+          ⚡
+        </div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">Priorité 24/7</h4>
+<p class="text-sm text-gray-600">Les partenaires Elite bénéficient d'un traitement prioritaire de leurs requêtes. Votre satisfaction est notre priorité absolue, jour et nuit.</p>
+</div>
+</div>
+</div>
+<!-- Highlight Box -->
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaOrange opacity-10 blur-3xl"></div>
+<div class="flex items-center justify-between">
+<div class="max-w-md">
+<h4 class="font-bold text-sismaOrange mb-2 uppercase tracking-tight">Un Partenariat d'Excellence</h4>
+<p class="text-sm opacity-80 leading-relaxed">
+            Ce niveau de service est réservé aux vendeurs ayant maintenu une note supérieure à 4.5/5 au cours des 3 derniers mois.
+          </p>
+</div>
+<div class="text-4xl">💎</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 11</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-promotion">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">12 / Outils de Promotion</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 12: Internal Promotion Tools -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">12</span>
+      Outils de Promotion Interne
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      Maximisez votre visibilité et convertissez davantage de prospects en utilisant nos outils marketing intégrés. Ces fonctionnalités sont conçues pour attirer l'attention au bon moment.
+    </p>
+<!-- Tools Grid -->
+<div class="grid grid-cols-3 gap-4 mb-10">
+<div class="p-6 border border-gray-100 rounded-2xl bg-white shadow-sm">
+<div class="text-3xl mb-4">🔥</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-xs tracking-wide">Visibilité Boostée</h4>
+<p class="text-xs text-gray-500 leading-relaxed">Mettez vos produits en avant dans les résultats de recherche et les catégories pertinentes pour capter l'intérêt immédiat.</p>
+</div>
+<div class="p-6 border border-gray-100 rounded-2xl bg-white shadow-sm">
+<div class="text-3xl mb-4">⚡</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-xs tracking-wide">Campagnes Flash</h4>
+<p class="text-xs text-gray-500 leading-relaxed">Créez des offres à durée limitée pour générer un sentiment d'urgence et stimuler les ventes impulsives durant les périodes creuses.</p>
+</div>
+<div class="p-6 border border-gray-100 rounded-2xl bg-white shadow-sm">
+<div class="text-3xl mb-4">🖼️</div>
+<h4 class="font-bold text-sismaDark mb-2 uppercase text-xs tracking-wide">Bannières</h4>
+<p class="text-xs text-gray-500 leading-relaxed">Affichez vos promotions saisonnières ou vos nouvelles collections sur les bannières rotatives de la page d'accueil.</p>
+</div>
+</div>
+<!-- Strategy Box -->
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaRed opacity-20 blur-3xl"></div>
+<h4 class="font-bold text-sismaOrange mb-3 uppercase tracking-tighter">Conseil d'Expert : Mix Marketing</h4>
+<p class="text-sm opacity-80 leading-relaxed">
+          Pour une efficacité maximale, combinez les <b>Campagnes Flash</b> avec la <b>Visibilité Boostée</b>. Cela garantit que votre offre irrésistible est vue par le plus grand nombre de clients qualifiés possible.
+        </p>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 12</p>
+</div>
+</section><section class="pdf-page page-break p-16 flex flex-col" data-purpose="content-page-data-analytics">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">13 / Analyse des Données &amp; Croissance</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 15: Data Analytics -->
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-sismaDark mb-6 flex items-center gap-4">
+<span class="w-8 h-8 bg-sismaRed text-white flex items-center justify-center rounded text-sm">15</span>
+      Analyse des Données &amp; Croissance
+    </h2>
+<p class="text-gray-600 leading-relaxed mb-8">
+      La donnée est le carburant de votre croissance. Utilisez nos outils d'analyse avancés pour comprendre votre marché, optimiser vos opérations et multiplier vos revenus.
+    </p>
+<!-- Analytics Grid -->
+<div class="grid grid-cols-1 gap-6 mb-10">
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaRed flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-sismaRed shadow-sm">
+<span class="material-symbols-outlined text-3xl">monitoring</span>
+</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">1. Tableau de Bord des Ventes</h4>
+<p class="text-sm text-gray-600">Suivez en temps réel votre chiffre d'affaires, le volume de commandes et vos taux de conversion pour mesurer l'efficacité de votre boutique.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaOrange flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-sismaOrange shadow-sm">
+<span class="material-symbols-outlined text-3xl">inventory_2</span>
+</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">2. Performance Produits</h4>
+<p class="text-sm text-gray-600">Identifiez vos meilleures ventes (best-sellers) et surveillez la rotation de vos stocks pour éviter les ruptures ou le surstockage.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-6 rounded-2xl border-l-4 border-sismaDark flex items-center gap-6">
+<div class="w-14 h-14 bg-white rounded-full flex-shrink-0 flex items-center justify-center text-sismaDark shadow-sm">
+<span class="material-symbols-outlined text-3xl">groups</span>
+</div>
+<div>
+<h4 class="font-bold text-sismaDark uppercase text-sm tracking-wide mb-1">3. Insights Clients</h4>
+<p class="text-sm text-gray-600">Comprenez qui sont vos acheteurs : démographie, comportement d'achat et fidélité, pour personnaliser vos offres et votre communication.</p>
+</div>
+</div>
+</div>
+<!-- Strategy Highlight -->
+<div class="bg-sismaDark p-8 rounded-3xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-sismaRed opacity-20 blur-3xl"></div>
+<div class="flex items-center gap-6">
+<div class="text-4xl text-sismaOrange">
+<span class="material-symbols-outlined text-5xl">insights</span>
+</div>
+<div>
+<h4 class="font-bold text-sismaOrange mb-2 uppercase tracking-tight">4. Stratégie Basée sur les Données</h4>
+<p class="text-sm opacity-80 leading-relaxed">
+            Ne devinez plus, décidez. Utilisez les rapports mensuels exportables pour ajuster vos prix dynamiquement et optimiser votre inventaire en fonction des tendances saisonnières.
+          </p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+<p>© 2024 SISMA Marketplace - Tous droits réservés</p>
+<p>Page 13</p>
+</div>
+</section><section class="pdf-page p-16 flex flex-col" data-purpose="content-page-support">
+<!-- Header -->
+<div class="flex justify-between items-center mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-gray-400">Page 14</span>
+<div class="w-10 h-10 bg-sismaLight rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-sismaRed rounded-full"></div>
+</div>
+</div>
+<!-- Section 8: Support -->
+<div class="flex-1 flex flex-col justify-center max-w-xl mx-auto text-center">
+<h2 class="text-4xl font-black text-sismaDark mb-8">Nous sommes là pour vous.</h2>
+<div class="space-y-6 text-left mb-12">
+<div class="bg-sismaLight p-8 rounded-3xl flex items-center gap-6">
+<div class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center text-white text-3xl shadow-lg">
+<svg class="w-8 h-8 fill-current" viewbox="0 0 24 24"><path d="M12.031 6.172c-2.203 0-4.007 1.796-4.007 3.991 0 .64.147 1.246.406 1.79l-1.687 4.35 4.492-1.64c.533.27 1.139.426 1.783.426 2.193 0 3.997-1.797 3.997-3.991 0-2.195-1.794-3.926-3.984-3.926zm3.303 5.922c-.189.533-.311.678-.711 1.023-.4.333-.911.411-2.133-.122-1.222-.534-2.133-1.445-2.667-2.667-.533-1.222-.444-1.733-.111-2.133.333-.4.489-.533 1.022-.711.222-.067.445-.067.556.022.111.089.111.222.111.333v1.334c0 .111-.089.222-.222.311-.133.089-.222.111-.222.111.111.222.333.445.556.667s.445.445.667.556c0 0 .022-.089.111-.222.089-.133.2-.222.311-.222h1.334c.111 0 .244 0 .333.111.089.111.089.333.022.556z"></path></svg>
+</div>
+<div>
+<h4 class="font-bold text-sismaDark text-xl">Support WhatsApp VIP</h4>
+<p class="text-gray-600">Une équipe dédiée répond à vos questions techniques 7j/7.</p>
+</div>
+</div>
+<div class="bg-sismaLight p-8 rounded-3xl flex items-center gap-6">
+<div class="w-16 h-16 bg-sismaRed rounded-full flex items-center justify-center text-white text-3xl shadow-lg">
+<span class="font-black">?</span>
+</div>
+<div>
+<h4 class="font-bold text-sismaDark text-xl">Centre d'Aide</h4>
+<p class="text-gray-600">Accédez à plus de 100 tutoriels vidéo et articles de blog.</p>
+</div>
+</div>
+</div>
+<div class="p-8 gradient-brand rounded-[40px] text-white">
+<h3 class="text-2xl font-bold mb-2">Prêt à dominer le marché ?</h3>
+<p class="opacity-90 mb-6">Connectez-vous dès maintenant à votre tableau de bord.</p>
+<button class="bg-white text-sismaRed px-10 py-4 rounded-full font-extrabold shadow-xl uppercase tracking-widest text-sm">Accéder au Dashboard</button>
+</div>
+</div>
+<!-- Footer Decoration -->
+<div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-sismaRed rounded flex items-center justify-center text-white text-xs font-bold">S</div>
+<span class="text-xs font-bold text-gray-400">Page 14</span>
+</div>
+<p class="text-xs text-gray-400">Page 14</p>
+</div>
+</section>
+<!-- END: Page 5 -->
+</body></html>

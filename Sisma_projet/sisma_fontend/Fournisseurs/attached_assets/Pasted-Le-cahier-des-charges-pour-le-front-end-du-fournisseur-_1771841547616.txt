@@ -1,0 +1,24 @@
+Le cahier des charges pour le front-end du fournisseur ASHOP définit un projet clair pour une landing page d'inscription et un dashboard de gestion e-commerce, adapté au marché ivoirien à Abidjan. Il met l'accent sur l'ergonomie mobile-first, l'intégration IA et des fonctionnalités comme la gestion des stocks et commandes, alignées sur des pratiques standards observées dans des marketplaces comme Dokan ou Shipturtle. Les couleurs de la charte SISMA (rouge #D81918, orange #F7941D) assurent une identité visuelle cohérente. [dokan](https://dokan.co/fr/wordpress/modules/vendor-dashboard/)
+
+## Structure Landing Page
+La landing page suit un funnel classique : hero engageant avec CTA vers formulaire, grid d'avantages (gestion produits, IA SEO, suivi commandes), timeline du processus (inscription → ajout produits → traitement commandes), formulaire sécurisé (avec reCAPTCHA et validation temps réel), témoignages, FAQ et footer.  
+Ce design optimise les conversions pour fournisseurs à Abidjan, similaire aux marketplaces locales comme Shopping Abidjan ou Adjovan. [shoppingabidjan](https://shoppingabidjan.com)
+SEO est priorisé avec meta optimisées et alt images pour visibilité organique.
+
+## Fonctionnalités Dashboard
+Le dashboard centralise CA (total/jour/semaine/mois), commandes (tri, sélection multiple, attribution livreurs), catalogue (produits/variantes, import CSV/XLS), assistant IA (génération SEO via image/mots-clés), stats/graphiques et alertes temps réel.  
+Paramètres incluent profil magasin et notifications (stock faible, produits non validés).  
+Ces éléments rappellent des dashboards e-commerce comme ceux de Shopify ou PowerBI, avec focus sur ventes par zone et retours. [cartelis](https://www.cartelis.com/blog/powerbi-exemples-dashboards-conseils/)
+
+| Section | Composants Clés | Interactions |
+|---------|-----------------|--------------|
+| Tableau de bord | CA, commandes attente, ruptures stock, notifications | Tri date, sélection multiple  [dokan](https://dokan.co/fr/wordpress/modules/vendor-dashboard/) |
+| Commandes | Statuts (Préparée/Expédiée/Livrée), attribution livreurs | Mise à jour groupée |
+| Catalogue | Produits simples/variables, images multiples, import masse | Ajout/Modif/Suppr, prévisualisation |
+| IA Produit | Titre/description/bullets/meta, ton/longueur paramétrables | Génération via image + keywords |
+| Stats | Graphiques CA/commandes, alertes | Temps réel  [blog.coupler](https://blog.coupler.io/ecommerce-dashboards/) |
+
+## Notes Techniques
+Utilisez responsive (breakpoints sm/md/lg/xl), animations légères (hover, transitions), lazy loading et code splitting pour performance.  
+Intégrez charte SISMA pour cohérence visuelle.  
+Développez composants réutilisables comme OrdersTable, AIContentGenerator et StatsGraph pour scalabilité. [enjeuxmarketing](https://www.enjeuxmarketing.com/cahier-des-charges-plateforme-ecommerce/)
