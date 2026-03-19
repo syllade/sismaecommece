@@ -570,7 +570,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth.api'], function ($route
         $router->get('orders/{id}', 'Api\ClientOrderController@show');
         $router->get('orders/{id}/qr-data', 'Api\ClientOrderController@getQrData');
         $router->get('orders/{id}/tracking', 'Api\ClientOrderController@getTrackingStatus');
+        $router->post('orders/{id}/cancel', 'Api\ClientOrderController@cancel');
         // Permet de créer une commande en étant connecté client (liaison customer_user_id)
         $router->post('orders', 'Api\OrderController@store');
+        
+        // Adresses client
+        $router->get('addresses', 'Api\V1\ClientAddressController@index');
+        $router->post('addresses', 'Api\V1\ClientAddressController@store');
+        $router->put('addresses/{id}', 'Api\V1\ClientAddressController@update');
+        $router->delete('addresses/{id}', 'Api\V1\ClientAddressController@destroy');
+        $router->post('addresses/{id}/default', 'Api\V1\ClientAddressController@setDefault');
     });
 });

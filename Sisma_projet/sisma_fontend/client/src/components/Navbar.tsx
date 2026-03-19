@@ -23,6 +23,7 @@ export function Navbar() {
     { href: "/", label: "Accueil" },
     { href: "/categories", label: "Catégories" },
     { href: "/shops", label: "Boutiques" },
+      
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -34,14 +35,14 @@ export function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b-2 border-[#D81918]">
 
-      {/* ── Barre supérieure orange — style Jumia ── */}
-      <div className="bg-[#f57224] hidden sm:block">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between h-8">
-          <div className="flex items-center gap-1.5 text-white text-[11px] font-medium">
-            <Truck className="w-3 h-3 shrink-0" />
-            <span>Livraison partout en Côte d'Ivoire · 24–72h</span>
+      {/* ── Barre supérieure SISMA ── */}
+      <div className="bg-gradient-to-r from-[#D81918] to-[#F7941D] hidden sm:block">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between h-9">
+          <div className="flex items-center gap-2 text-white text-xs font-medium">
+            <Truck className="w-3.5 h-3.5 shrink-0" />
+            <span>Livraison partout en Côte d'Ivoire · 24–72h · Satisfait ou remboursé</span>
           </div>
           <div className="flex items-center gap-4">
             {/* Réseaux sociaux */}
@@ -49,7 +50,7 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="flex items-center gap-1 text-white/90 hover:text-white text-[11px] font-medium transition-colors"
+                  className="flex items-center gap-1 text-white/90 hover:text-white text-xs font-medium transition-colors"
                 >
                   <Share2 className="w-3 h-3" />
                   Réseaux
@@ -179,14 +180,14 @@ export function Navbar() {
             <div className="px-4 py-3 space-y-1">
               {/* Recherche mobile */}
               <form onSubmit={handleSearch} className="flex items-center gap-2 mb-3">
-                <div className="flex-1 flex h-9 rounded overflow-hidden border border-gray-300 focus-within:border-[#f57224]">
+                <div className="flex-1 flex h-9 rounded overflow-hidden border border-gray-300 focus-within:border-[#D81918]">
                   <input
                     value={headerSearch}
                     onChange={(e) => setHeaderSearch(e.target.value)}
                     placeholder="Rechercher..."
                     className="flex-1 px-3 text-sm outline-none"
                   />
-                  <button type="submit" className="px-3 bg-[#f57224] text-white">
+                  <button type="submit" className="px-4 bg-[#D81918] text-white hover:bg-[#c01616] transition-colors">
                     <Search className="w-4 h-4" />
                   </button>
                 </div>
@@ -202,7 +203,7 @@ export function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                       isActive
-                        ? "bg-orange-50 text-[#f57224] border-l-4 border-[#f57224]"
+                        ? "bg-red-50 text-[#D81918] border-l-4 border-[#D81918]"
                         : "text-gray-700 hover:bg-gray-50"
                     }`}
                   >

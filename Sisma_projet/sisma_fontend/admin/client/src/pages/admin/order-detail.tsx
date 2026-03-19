@@ -1,7 +1,31 @@
-import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useRoute } from "wouter";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ordersApi, type AdminOrder, type AdminOrderItem } from "@/api/orders.api";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/apiConfig";
+import { 
+  ArrowLeft, 
+  Package, 
+  Truck, 
+  CheckCircle, 
+  XCircle, 
+  Clock, 
+  MapPin, 
+  Phone, 
+  Mail, 
+  User, 
+  Store,
+  QrCode,
+  Calendar,
+  ShoppingCart,
+  Edit,
+  Printer
+} from "lucide-react";
 
 // Material Symbols Icon component
 function MaterialIcon({ name, className }: { name: string; className?: string }) {
@@ -12,115 +36,48 @@ function MaterialIcon({ name, className }: { name: string; className?: string })
   );
 }
 
-// Mock order data - in real app this would come from API
-interface OrderItem {
-  id: number;
-  name: string;
-  sku: string;
-  quantity: number;
-  price: number;
-  image?: string;
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  status: "pending" | "processing" | "picked_up" | "in_transit" | "delivered" | "cancelled";
-  date: string;
-  items: OrderItem[];
-  subtotal: number;
-  shippingFee: number;
-  commission: number;
-  total: number;
-  paymentStatus: "settled" | "pending" | "failed";
-  driver?: {
-    name: string;
-    rating: number;
-    photo?: string;
-    phone: string;
-    vehiclePlate: string;
-  };
-  supplier: {
-    name: string;
-    address: string;
-    phone: string;
-  };
-  customer: {
-    name: string;
-    address: string;
-    phone: string;
-  };
-}
-
-// Mock data
-const mockOrder: Order = {
-  id: "1",
-  orderNumber: "ORD-8921",
-  status: "in_transit",
-  date: "2023-10-24T10:30:00",
-  items: [
-    {
-      id: 1,
-      name: "Premium Runners X-2",
-      sku: "SM-88219-R",
-      quantity: 1,
-      price: 45000,
-    },
-    {
-      id: 2,
-      name: "Quantum Smartwatch",
-      sku: "SM-44102-S",
-      quantity: 1,
-      price: 22500,
-    },
-  ],
-  subtotal: 67500,
-  shippingFee: 2500,
-  commission: 5600,
-  total: 75600,
-  paymentStatus: "settled",
-  driver: {
-    name: "Mohamed Traoré",
-    rating: 4.95,
-    phone: "+225 07 12 34 56 78",
-    vehiclePlate: "AB-1234-SIS",
-  },
-  supplier: {
-    name: "Urban Gear Co.",
-    address: "Zone Industrielle, Batiment 4A, Abidjan",
-    phone: "+225 05 12 34 56 78",
-  },
-  customer: {
-    name: "Elena Valenzuela",
-    address: "Av. Houphouet-Boigny 120, Apt 502, Plateau, Abidjan",
-    phone: "+225 05 55 44 33 22",
-  },
-};
-
-const statusLabels: Record<Order["status"], string> = {
-  pending: "En attente",
-  processing: "En traitement",
-  picked_up: "Ramassé",
-  in_transit: "En livraison",
-  delivered: "Livré",
-  cancelled: "Annulé",
-};
-
-const statusColors: Record<Order["status"], string> = {
-  pending: "bg-amber-100 text-amber-700",
-  processing: "bg-blue-100 text-blue-700",
-  picked_up: "bg-purple-100 text-purple-700",
-  in_transit: "bg-primary/20 text-sisma-red",
-  delivered: "bg-emerald-100 text-emerald-700",
-  cancelled: "bg-red-100 text-red-700",
-};
-
 export default function OrderDetailPage() {
-  const [location] = useLocation();
-  const [order] = useState<Order>(mockOrder);
+  const [location, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  // Extract order ID from URL
+  const [match, params] = useRoute("/admin/orders/:id") || [false, null];
+  const [superAdminMatch, superAdminParams] = useRoute("/super-admin/orders/:id") || [false, null];
+  const orderId = match ? params?.id : superAdminMatch ? superAdminParams?.id : null;
+  
+  // Fetch order data from API
+  const { data: order, isLoading, error } = useQuery<AdminOrder>({
+    queryKey: ["admin", "order", orderId],
+    queryFn: () => ordersApi.getAdminOrder(Number(orderId)),
+    enabled: !!orderId,
+    retry: 1,
+  });
+  
+  // Status update mutation
+  const statusMutation = useMutation({
+    mutationFn: ({ orderId, nextStatus }: { orderId: number; nextStatus: string }) =>
+      apiRequest(`/api/v1/admin/orders/${orderId}/status`, {
+        method: "PUT",
+        body: JSON.stringify({ status: nextStatus }),
+      }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["admin", "order", orderId] });
+      await queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+      toast({ title: "Statut mis à jour", description: "La commande a été mise à jour avec succès" });
+    },
+    onError: (error: unknown) => {
+      toast({
+        title: "Mise à jour impossible",
+        description: error instanceof Error ? error.message : "Erreur inconnue",
+        variant: "destructive",
+      });
+    },
+  });
 
   // Format currency in CFA (FCFA)
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | undefined) => {
+    if (amount === undefined || amount === null) return "0 CFA";
     return new Intl.NumberFormat("fr-CI", {
       style: "currency",
       currency: "XOF",
@@ -140,25 +97,41 @@ export default function OrderDetailPage() {
   };
 
   // Calculate timeline progress
+  // Format status for display
+  const formatStatus = (status: string): { label: string; variant: string } => {
+    const normalized = status?.toLowerCase() || "";
+    if (normalized === "pending") return { label: "En attente", variant: "bg-amber-100 text-amber-700" };
+    if (normalized === "preparee" || normalized === "processing") return { label: "En préparation", variant: "bg-blue-100 text-blue-700" };
+    if (normalized === "expediee") return { label: "Expédiée", variant: "bg-purple-100 text-purple-700" };
+    if (normalized === "livree" || normalized === "delivered" || normalized === "completed") return { label: "Livrée", variant: "bg-green-100 text-green-700" };
+    if (normalized === "annulee" || normalized === "cancelled") return { label: "Annulée", variant: "bg-red-100 text-red-700" };
+    return { label: status || "Inconnu", variant: "bg-slate-100 text-slate-700" };
+  };
+
+  // Calculate progress steps based on order status
   const getProgressSteps = () => {
+    if (!order) return [];
+    
     const steps = [
-      { key: "pending", label: "Commande passée", time: order.date },
-      { key: "processing", label: "En traitement", time: "2023-10-24T09:00:00" },
-      { key: "picked_up", label: "Ramassé", time: "2023-10-24T11:15:00" },
-      { key: "in_transit", label: "En livraison", time: "2023-10-24T12:00:00" },
-      { key: "delivered", label: "Livré", time: "" },
+      { key: "pending", label: "Commande passée", time: order.created_at },
+      { key: "preparee", label: "En préparation", time: null },
+      { key: "expediee", label: "Expédiée", time: null },
+      { key: "livree", label: "Livrée", time: null },
     ];
 
-    const statusIndex: Record<Order["status"], number> = {
+    const statusOrder: Record<string, number> = {
       pending: 0,
+      preparee: 1,
       processing: 1,
-      picked_up: 2,
-      in_transit: 3,
-      delivered: 4,
+      expediee: 2,
+      livree: 3,
+      delivered: 3,
+      completed: 3,
+      annulee: -1,
       cancelled: -1,
     };
 
-    const currentIndex = statusIndex[order.status];
+    const currentIndex = statusOrder[order.status?.toLowerCase() || ""] ?? 0;
 
     return steps.map((step, index) => ({
       ...step,
@@ -169,35 +142,112 @@ export default function OrderDetailPage() {
 
   const progressSteps = getProgressSteps();
 
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500"></div>
+            <p className="text-sm text-slate-500">Chargement de la commande...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !order) {
+    return (
+      <Layout>
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+          <Package className="h-16 w-16 text-slate-300" />
+          <h2 className="text-xl font-semibold text-slate-600">Commande non trouvée</h2>
+          <p className="text-sm text-slate-500">Cette commande n'existe pas ou a été supprimée.</p>
+          <Link href="/admin/orders">
+            <Button variant="outline">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Retour aux commandes
+            </Button>
+          </Link>
+        </div>
+      </Layout>
+    );
+  }
+
+  const orderStatus = formatStatus(order.status);
+  const orderItems = order.items || [];
+  const customerName = order.customer_name || "Client";
+  const customerPhone = order.customer_phone || "-";
+  const customerLocation = order.commune || order.customer_location || "-";
+  const supplierName = order.supplier_name || "Fournisseur";
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Back Button & Header */}
+        <div className="flex items-center gap-4">
+          <Link href="/admin/orders">
+            <Button variant="ghost" size="sm" className="gap-1">
+              <ArrowLeft className="h-4 w-4" />
+              Retour
+            </Button>
+          </Link>
+        </div>
+
         {/* Order Header & Actions */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl font-black tracking-tight">Commande {order.orderNumber}</h1>
-              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusColors[order.status]} ${statusColors[order.status].includes('primary') ? '' : 'bg-opacity-20'}`}>
-                {statusLabels[order.status]}
+              <h1 className="text-3xl font-black tracking-tight">Commande #{order.id}</h1>
+              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${orderStatus.variant}`}>
+                {orderStatus.label}
               </span>
             </div>
             <p className="text-slate-500 dark:text-slate-400 font-medium">
-              Passée le {formatDate(order.date)} • {order.items.length} articles • {formatCurrency(order.total)}
+              Passée le {formatDate(order.created_at || "")} • {orderItems.length} article(s) • {formatCurrency(order.total)}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
+            <Link href={`/admin/orders/qr?id=${order.id}`}>
+              <Button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-sisma-red/20 hover:bg-sisma-red/5 font-semibold text-sm transition-all">
+                <QrCode className="h-4 w-4" />
+                Voir QR Code
+              </Button>
+            </Link>
             <Button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-sisma-red/20 hover:bg-sisma-red/5 font-semibold text-sm transition-all">
-              <MaterialIcon name="print" className="text-lg" />
+              <Printer className="h-4 w-4" />
               Imprimer facture
             </Button>
-            <Button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-sisma-red/20 hover:bg-sisma-red/5 font-semibold text-sm transition-all">
-              <MaterialIcon name="chat" className="text-lg" />
-              Contacter livreur
-            </Button>
-            <Button variant="destructive" className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all">
-              <MaterialIcon name="cancel" className="text-lg" />
-              Annuler commande
-            </Button>
+            {/* Status Action Buttons */}
+            {order.status === "pending" && (
+              <Button 
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all bg-green-600 hover:bg-green-700"
+                onClick={() => statusMutation.mutate({ orderId: order.id, nextStatus: "preparee" })}
+                disabled={statusMutation.isPending}
+              >
+                <CheckCircle className="h-4 w-4" />
+                Valider commande
+              </Button>
+            )}
+            {(order.status === "preparee" || order.status === "processing") && (
+              <Button 
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all bg-purple-600 hover:bg-purple-700"
+                onClick={() => statusMutation.mutate({ orderId: order.id, nextStatus: "expediee" })}
+                disabled={statusMutation.isPending}
+              >
+                <Truck className="h-4 w-4" />
+                Expédier
+              </Button>
+            )}
+            {order.status === "expediee" && (
+              <Button 
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all bg-green-600 hover:bg-green-700"
+                onClick={() => statusMutation.mutate({ orderId: order.id, nextStatus: "livree" })}
+                disabled={statusMutation.isPending}
+              >
+                <CheckCircle className="h-4 w-4" />
+                Confirmer livraison
+              </Button>
+            )}
           </div>
         </div>
 
@@ -249,90 +299,95 @@ export default function OrderDetailPage() {
             {/* Step-by-step Delivery Timeline */}
             <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl p-6">
               <h3 className="font-bold mb-8 flex items-center gap-2">
-                <MaterialIcon name="route" className="text-sisma-red" />
+                <Clock className="h-5 w-5 text-sisma-red" />
                 Progression de la livraison
               </h3>
               <div className="relative flex justify-between items-start">
                 {/* Line */}
-                <div className="absolute top-5 left-0 w-full h-0.5 bg-sisma-red/10 dark:bg-sisma-red/20 -z-0"></div>
+                <div className="absolute top-5 left-0 w-full h-0.5 bg-slate-200 -z-0"></div>
                 <div 
-                  className="absolute top-5 left-0 h-0.5 bg-sisma-red -z-0"
+                  className="absolute top-5 left-0 h-0.5 bg-green-500 -z-0 transition-all duration-300"
                   style={{ 
-                    width: order.status === "delivered" ? "100%" : 
-                           order.status === "in_transit" ? "66%" :
-                           order.status === "picked_up" ? "50%" :
-                           order.status === "processing" ? "33%" : "0%"
+                    width: order.status === "livree" || order.status === "delivered" || order.status === "completed" ? "100%" : 
+                           order.status === "expediee" ? "66%" :
+                           order.status === "preparee" || order.status === "processing" ? "33%" : "0%"
                   }}
                 ></div>
                 
                 {/* Steps */}
                 {progressSteps.map((step, index) => (
-                  <div key={step.key} className="relative z-10 flex flex-col items-center w-1/5 text-center">
+                  <div key={step.key} className="relative z-10 flex flex-col items-center w-1/4 text-center">
                     <div 
                       className={`size-10 rounded-full flex items-center justify-center shadow-lg mb-3 transition-all ${
                         step.completed 
-                          ? "bg-sisma-red text-white shadow-sisma-red/30" 
-                          : "bg-slate-100 dark:bg-slate-800 border-2 border-sisma-red/20 text-slate-400"
+                          ? "bg-green-500 text-white shadow-green-300" 
+                          : "bg-slate-100 border-2 border-slate-200 text-slate-400"
                       } ${step.active ? "animate-pulse" : ""}`}
                     >
-                      {step.completed && order.status !== "cancelled" ? (
-                        <MaterialIcon name="check_circle" className="text-xl" />
+                      {step.completed ? (
+                        <CheckCircle className="h-5 w-5" />
                       ) : (
-                        <MaterialIcon name={
-                          step.key === "pending" ? "shopping_cart" :
-                          step.key === "processing" ? "inventory_2" :
-                          step.key === "picked_up" ? "inventory" :
-                          step.key === "in_transit" ? "local_shipping" :
-                          "verified"
-                        } className="text-xl" />
+                        <Clock className="h-5 w-5" />
                       )}
                     </div>
-                    <p className={`text-xs font-bold uppercase tracking-tighter ${step.completed ? "text-slate-900 dark:text-white" : "opacity-40"}`}>
+                    <p className={`text-xs font-bold uppercase tracking-tighter ${step.completed ? "text-slate-900" : "opacity-40"}`}>
                       {step.label}
                     </p>
-                    <p className="text-[10px] opacity-60">{step.time ? formatDate(step.time).split(" à ")[1] : "En attente"}</p>
+                    <p className="text-[10px] opacity-60">{step.completed ? "Terminé" : "En attente"}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Order Items Table */}
-            <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl overflow-hidden">
-              <div className="p-5 border-b border-sisma-red/10">
-                <h3 className="font-bold flex items-center gap-2">
-                  <MaterialIcon name="shopping_bag" className="text-sisma-red" />
-                  Articles commandés
+            <div className="bg-white dark:bg-white/5 border border-slate-200 rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-slate-200">
+                <h3 className="font-bold flex items-center gap-2 text-lg">
+                  <ShoppingCart className="h-5 w-5 text-blue-600" />
+                  Articles commandés ({orderItems.length})
                 </h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
-                  <thead className="bg-sisma-red/5 text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400">
+                  <thead className="bg-slate-50 text-xs uppercase font-semibold text-slate-600">
                     <tr>
-                      <th className="px-6 py-4">Produit</th>
-                      <th className="px-6 py-4">Quantité</th>
-                      <th className="px-6 py-4">Prix</th>
-                      <th className="px-6 py-4 text-right">Total</th>
+                      <th className="px-4 py-3">Produit</th>
+                      <th className="px-4 py-3">Quantité</th>
+                      <th className="px-4 py-3">Prix</th>
+                      <th className="px-4 py-3 text-right">Total</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-sisma-red/5">
-                    {order.items.map((item) => (
-                      <tr key={item.id}>
-                        <td className="px-6 py-5">
-                          <div className="flex items-center gap-3">
-                            <div className="size-10 rounded-lg bg-slate-200 dark:bg-white/10 flex-shrink-0 flex items-center justify-center">
-                              <MaterialIcon name="inventory_2" className="text-slate-400" />
+                  <tbody className="divide-y divide-slate-100">
+                    {orderItems.length > 0 ? (
+                      orderItems.map((item, idx) => (
+                        <tr key={item.id || idx} className="hover:bg-slate-50">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                              <div className="size-10 rounded-lg bg-slate-200 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                {item.product_name ? (
+                                  <img src={item.image || "https://placehold.co/40"} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                  <Package className="h-5 w-5 text-slate-400" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-slate-900">{item.product_name || "Produit"}</p>
+                                <p className="text-xs text-slate-500">Réf: {item.product_id || "-"}</p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-bold">{item.name}</p>
-                              <p className="text-xs opacity-60">SKU: {item.sku}</p>
-                            </div>
-                          </div>
+                          </td>
+                          <td className="px-4 py-3 font-medium">{item.quantity || 1}</td>
+                          <td className="px-4 py-3 font-medium">{formatCurrency(item.price)}</td>
+                          <td className="px-4 py-3 font-bold text-right">{formatCurrency((item.price || 0) * (item.quantity || 1))}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="px-4 py-8 text-center text-slate-500">
+                          Aucun article trouvé
                         </td>
-                        <td className="px-6 py-5 font-medium">{item.quantity}</td>
-                        <td className="px-6 py-5 font-medium">{formatCurrency(item.price)}</td>
-                        <td className="px-6 py-5 font-bold text-right">{formatCurrency(item.price * item.quantity)}</td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -340,109 +395,108 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Sidebar (Right Column) */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Financial Summary */}
-            <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl p-6 shadow-xl shadow-sisma-red/5">
-              <h3 className="font-bold mb-6 text-lg">Résumé financier</h3>
-              <div className="space-y-4">
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <h3 className="font-bold mb-4 text-lg text-slate-900">Résumé financier</h3>
+              <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="opacity-60">Sous-total</span>
+                  <span className="text-slate-500">Sous-total</span>
                   <span className="font-semibold">{formatCurrency(order.subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="opacity-60">Frais de livraison</span>
-                  <span className="font-semibold">{formatCurrency(order.shippingFee)}</span>
+                  <span className="text-slate-500">Frais de livraison</span>
+                  <span className="font-semibold">{formatCurrency(order.delivery_fee)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-sisma-red">
-                  <span className="font-medium">Commission Sisma (8%)</span>
-                  <span className="font-bold">+{formatCurrency(order.commission)}</span>
-                </div>
-                <div className="pt-4 border-t border-sisma-red/10 flex justify-between items-center">
-                  <span className="font-black text-lg">Total</span>
-                  <span className="font-black text-2xl text-sisma-red tracking-tighter">{formatCurrency(order.total)}</span>
-                </div>
-              </div>
-              <div className="mt-6 p-3 rounded-xl bg-sisma-red/5 border border-sisma-red/10 flex items-center gap-3">
-                <MaterialIcon name="account_balance_wallet" className="text-sisma-red" />
-                <div className="text-[10px] leading-tight">
-                  <p className="font-bold uppercase tracking-widest text-sisma-red">Statut du paiement</p>
-                  <p className="font-medium opacity-80 uppercase">
-                    {order.paymentStatus === "settled" ? "Réglé via Sisma Wallet" : 
-                     order.paymentStatus === "pending" ? "En attente" : "Échoué"}
-                  </p>
+                <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
+                  <span className="font-bold text-lg">Total</span>
+                  <span className="font-bold text-xl text-blue-600">{formatCurrency(order.total)}</span>
                 </div>
               </div>
             </div>
 
             {/* Driver Info Card */}
-            {order.driver && (
-              <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl p-6">
-                <h3 className="font-bold mb-6 flex items-center gap-2">
-                  <MaterialIcon name="person" className="text-sisma-red" />
+            {order.delivery_person && (
+              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                <h3 className="font-bold mb-4 flex items-center gap-2">
+                  <Truck className="h-5 w-5 text-blue-600" />
                   Livreur assigné
                 </h3>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="size-16 rounded-2xl bg-slate-200 dark:bg-white/10 overflow-hidden border-2 border-sisma-red/20 flex items-center justify-center">
-                    <MaterialIcon name="person" className="text-3xl text-slate-400" />
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="size-14 rounded-full bg-slate-200 flex items-center justify-center">
+                    <User className="h-7 w-7 text-slate-400" />
                   </div>
                   <div>
-                    <p className="text-lg font-black tracking-tight">{order.driver.name}</p>
-                    <p className="text-xs text-sisma-red font-bold flex items-center gap-1">
-                      <MaterialIcon name="stars" className="text-sm" />
-                      {order.driver.rating} Rating
-                    </p>
+                    <p className="font-bold text-slate-900">{order.delivery_person.name}</p>
+                    <p className="text-xs text-slate-500">{order.delivery_person.zone || "Zone non définie"}</p>
                   </div>
                 </div>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center gap-3 text-sm">
-                    <MaterialIcon name="directions_car" className="opacity-60" />
-                    <div>
-                      <p className="text-[10px] opacity-60 uppercase font-bold">Plaque d'immatriculation</p>
-                      <p className="font-bold">{order.driver.vehiclePlate}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <MaterialIcon name="call" className="opacity-60" />
-                    <div>
-                      <p className="text-[10px] opacity-60 uppercase font-bold">Numéro de téléphone</p>
-                      <p className="font-bold">{order.driver.phone}</p>
-                    </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-slate-400" />
+                    <span className="font-medium">{order.delivery_person.phone || "-"}</span>
                   </div>
                 </div>
-                <Button className="w-full py-3 rounded-xl bg-sisma-red text-white font-bold text-sm shadow-lg shadow-sisma-red/20 hover:scale-[1.02] active:scale-95 transition-all">
-                  Envoyer un message sécurisé
-                </Button>
               </div>
             )}
 
-            {/* Customer & Supplier Info */}
-            <div className="space-y-4">
-              {/* Supplier */}
-              <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <MaterialIcon name="storefront" className="text-sisma-red text-lg" />
-                  <h4 className="text-xs font-black uppercase tracking-widest opacity-60">Fournisseur</h4>
-                </div>
-                <p className="font-bold mb-1">{order.supplier.name}</p>
-                <p className="text-xs opacity-70 leading-relaxed mb-3">{order.supplier.address}</p>
-                <a className="text-xs font-bold text-sisma-red flex items-center gap-1" href={`tel:${order.supplier.phone}`}>
-                  <MaterialIcon name="phone" className="text-sm" />
-                  {order.supplier.phone}
-                </a>
-              </div>
+            {/* Supplier Info Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <h3 className="font-bold mb-4 flex items-center gap-2">
+                <Store className="h-5 w-5 text-blue-600" />
+                Fournisseur
+              </h3>
+              <p className="font-bold text-slate-900">{supplierName}</p>
+            </div>
 
-              {/* Customer */}
-              <div className="bg-white dark:bg-white/5 border border-sisma-red/10 rounded-2xl p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <MaterialIcon name="person_pin_circle" className="text-sisma-red text-lg" />
-                  <h4 className="text-xs font-black uppercase tracking-widest opacity-60">Client</h4>
+            {/* Customer Info Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <h3 className="font-bold mb-4 flex items-center gap-2">
+                <User className="h-5 w-5 text-blue-600" />
+                Client
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="font-bold text-slate-900">{customerName}</p>
                 </div>
-                <p className="font-bold mb-1">{order.customer.name}</p>
-                <p className="text-xs opacity-70 leading-relaxed mb-3">{order.customer.address}</p>
-                <a className="text-xs font-bold text-sisma-red flex items-center gap-1" href={`tel:${order.customer.phone}`}>
-                  <MaterialIcon name="phone" className="text-sm" />
-                  {order.customer.phone}
-                </a>
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="h-4 w-4 text-slate-400" />
+                  <span>{customerPhone}</span>
+                </div>
+                <div className="flex items-start gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-slate-400 mt-0.5" />
+                  <span>{customerLocation}</span>
+                </div>
+                {order.notes && (
+                  <div className="mt-3 pt-3 border-t border-slate-200">
+                    <p className="text-xs font-semibold text-slate-500 uppercase mb-1">Notes</p>
+                    <p className="text-sm text-slate-700">{order.notes}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Delivery Info Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <h3 className="font-bold mb-4 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-blue-600" />
+                Informations livraison
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs font-semibold text-slate-500 uppercase">Date de création</p>
+                  <p className="text-sm font-medium">{formatDate(order.created_at || "")}</p>
+                </div>
+                {order.delivery_date && (
+                  <div>
+                    <p className="text-xs font-semibold text-slate-500 uppercase">Date de livraison</p>
+                    <p className="text-sm font-medium">{formatDate(order.delivery_date)}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs font-semibold text-slate-500 uppercase">Type de livraison</p>
+                  <p className="text-sm font-medium">{order.delivery_type || "Standard"}</p>
+                </div>
               </div>
             </div>
           </div>

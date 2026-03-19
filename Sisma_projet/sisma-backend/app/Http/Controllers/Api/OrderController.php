@@ -540,7 +540,7 @@ class OrderController extends Controller
                 'delivery_fee' => 'required|numeric|min:0',
                 'notes' => 'sometimes|string',
                 'items' => 'required|array|min:1',
-                'items.*.product_id' => 'required|exists:products,id',
+                'items.*.product_id' => 'required|integer|min:1',
                 'items.*.quantity' => 'required|integer|min:1',
                 'items.*.color' => 'nullable|string|max:50',
                 'items.*.size' => 'nullable|string|max:50',

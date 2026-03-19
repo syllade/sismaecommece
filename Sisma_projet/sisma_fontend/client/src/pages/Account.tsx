@@ -438,8 +438,8 @@ export default function Account() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-14 sm:pt-16 pb-12">
-      <div className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-surface pt-14 sm:pt-16 pb-12">
+      <div className="bg-surface-container-low border-b border-outline-variant/20">
         <div className="container mx-auto px-3 max-w-4xl py-4">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
             <Link href="/" className="hover:text-red-600">
@@ -474,97 +474,114 @@ export default function Account() {
           </div>
         )}
 
-        <div className="grid gap-4 md:grid-cols-[1.15fr_0.85fr]">
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="grid gap-8 md:grid-cols-[1fr_1fr] items-start">
+          {/* Auth Forms */}
+          <div className="bg-surface-container-lowest p-8 md:p-12 rounded-2xl shadow-[0_10px_40px_rgba(28,27,27,0.06)]">
             <Tabs value={tab} onValueChange={(value) => setTab(value as "login" | "register")}>
-              <TabsList className="grid w-full grid-cols-2 bg-orange-50">
-                <TabsTrigger value="login">Connexion</TabsTrigger>
-                <TabsTrigger value="register">Créer un compte</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 bg-surface-container-high rounded-xl p-1">
+                <TabsTrigger 
+                  value="login"
+                  className="rounded-lg font-bold text-sm data-[state=active]:bg-[#D81918] data-[state=active]:text-white transition-all"
+                >
+                  Connexion
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="register"
+                  className="rounded-lg font-bold text-sm data-[state=active]:bg-[#D81918] data-[state=active]:text-white transition-all"
+                >
+                  Créer un compte
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="login" className="mt-5">
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <label className="block text-sm text-gray-600">
-                    Email
+              <TabsContent value="login" className="mt-8">
+                <form onSubmit={handleLogin} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Email</label>
                     <input
                       type="email"
                       value={loginEmail}
                       onChange={(event) => setLoginEmail(event.target.value)}
-                      className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                      className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                      placeholder="jean@exemple.com"
                       required
                     />
-                  </label>
-                  <label className="block text-sm text-gray-600">
-                    Mot de passe
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Mot de passe</label>
                     <input
                       type="password"
                       value={loginPassword}
                       onChange={(event) => setLoginPassword(event.target.value)}
-                      className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                      className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                      placeholder="••••••••"
                       required
                     />
-                  </label>
+                  </div>
                   <button
                     type="submit"
                     disabled={submitting === "login"}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#f57224] text-white font-semibold hover:bg-[#e56614] transition-colors disabled:opacity-60"
+                    className="w-full bg-gradient-to-r from-[#D81918] to-[#d81918] text-white font-bold py-4 rounded-full text-base shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2"
                   >
-                    {submitting === "login" && <Loader2 className="w-4 h-4 animate-spin" />}
-                    Me connecter
+                    {submitting === "login" && <Loader2 className="w-5 h-5 animate-spin" />}
+                    Se connecter
                   </button>
                 </form>
               </TabsContent>
 
-              <TabsContent value="register" className="mt-5">
-                <form onSubmit={handleRegister} className="space-y-4">
+              <TabsContent value="register" className="mt-8">
+                <form onSubmit={handleRegister} className="space-y-6">
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="block text-sm text-gray-600 sm:col-span-2">
-                      Nom complet
+                    <div className="space-y-2 sm:col-span-2">
+                      <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Nom complet</label>
                       <input
                         value={registerForm.name}
                         onChange={(event) => updateForm(setRegisterForm, "name", event.target.value)}
-                        className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                        className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                        placeholder="Jean Dupont"
                         required
                       />
-                    </label>
-                    <label className="block text-sm text-gray-600">
-                      Téléphone
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Téléphone</label>
                       <input
                         value={registerForm.phone}
                         onChange={(event) => updateForm(setRegisterForm, "phone", event.target.value)}
-                        className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                        className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                        placeholder="+225 00 00 00 00"
                         required
                       />
-                    </label>
-                    <label className="block text-sm text-gray-600">
-                      Email
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Email</label>
                       <input
                         type="email"
                         value={registerForm.email}
                         onChange={(event) => updateForm(setRegisterForm, "email", event.target.value)}
-                        className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                        className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                        placeholder="jean@exemple.com"
                         required
                       />
-                    </label>
-                    <label className="block text-sm text-gray-600 sm:col-span-2">
-                      Mot de passe
+                    </div>
+                    <div className="space-y-2 sm:col-span-2">
+                      <label className="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Mot de passe</label>
                       <input
                         type="password"
                         value={registerPassword}
                         onChange={(event) => setRegisterPassword(event.target.value)}
-                        className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-[#f57224] focus:outline-none focus:ring-2 focus:ring-[#f57224]/20"
+                        className="w-full bg-surface-container-high border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary/20 focus:bg-white transition-all text-on-surface"
+                        placeholder="••••••••"
                         minLength={6}
                         required
                       />
-                    </label>
+                    </div>
                   </div>
 
                   <button
                     type="submit"
                     disabled={submitting === "register"}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#f57224] text-white font-semibold hover:bg-[#e56614] transition-colors disabled:opacity-60"
+                    className="w-full bg-gradient-to-r from-[#D81918] to-[#d81918] text-white font-bold py-4 rounded-full text-base shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 mt-6"
                   >
-                    {submitting === "register" && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {submitting === "register" && <Loader2 className="w-5 h-5 animate-spin" />}
                     Créer mon compte
                   </button>
                 </form>
@@ -572,35 +589,59 @@ export default function Account() {
             </Tabs>
 
             {authError && (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="mt-6 rounded-xl border border-error/20 bg-error-container px-4 py-3 text-sm text-error">
                 {authError}
               </div>
             )}
           </div>
 
-          <div className="space-y-4">
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <User className="w-5 h-5 text-[#f57224]" />
-                <h2 className="text-lg font-semibold text-gray-900">Pourquoi créer un compte ?</h2>
+          {/* Benefits Sidebar */}
+          <div className="space-y-6">
+            {/* Why Account Card */}
+            <div className="bg-surface-container-low p-8 rounded-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                  <User className="w-6 h-6" />
+                </div>
+                <h2 className="text-xl font-extrabold tracking-tight">Pourquoi créer un compte ?</h2>
               </div>
-              <div className="space-y-3 text-sm text-gray-600">
-                <p>Suivi complet de vos commandes après la première conversion.</p>
-                <p>Notifications utiles seulement si vous les activez.</p>
-                <p>Commande rapide avec pré-remplissage du nom, téléphone et adresse.</p>
-                <p>Produits moins chers et recommandations personnalisées pour vos prochains achats.</p>
+              <div className="space-y-4 text-on-surface-variant">
+                <p className="text-sm font-medium">✓ Suivi complet de vos commandes</p>
+                <p className="text-sm font-medium">✓ Notifications utiles et personnalisées</p>
+                <p className="text-sm font-medium">✓ Commande rapide avec pré-remplissage</p>
+                <p className="text-sm font-medium">✓ Produits recommandés pour vous</p>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-orange-200 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-[#f57224]" />
-                <h2 className="text-lg font-semibold text-gray-900">Stratégie conversion SISMA</h2>
+            {/* Trust Badges */}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="bg-surface-container-lowest p-6 rounded-2xl flex items-center gap-5 border border-outline-variant/10 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined" data-weight="fill">payments</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Paiement à la livraison</p>
+                  <p className="text-xs text-on-surface-variant">Payez en toute sécurité à réception</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">
-                Le parcours reste sans friction au checkout, puis le compte devient un accélérateur de confiance et
-                de fidélité après achat.
-              </p>
+              <div className="bg-surface-container-lowest p-6 rounded-2xl flex items-center gap-5 border border-outline-variant/10 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined" data-weight="fill">local_shipping</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Livraison 24-72h</p>
+                  <p className="text-xs text-on-surface-variant">Suivi en temps réel disponible</p>
+                </div>
+              </div>
+              <div className="bg-surface-container-lowest p-6 rounded-2xl flex items-center gap-5 border border-outline-variant/10 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined" data-weight="fill">replay</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Retour 14 jours</p>
+                  <p className="text-xs text-on-surface-variant">Satisfait ou remboursé intégralement</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

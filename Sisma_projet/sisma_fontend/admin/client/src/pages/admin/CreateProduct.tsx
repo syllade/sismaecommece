@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Package, Plus, Save, Image, DollarSign, Warehouse, Tag, Store } from "lucide-react";
 import { Layout } from "@/components/layout";
@@ -16,10 +16,12 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { getAuthHeaders, buildApiUrl } from "@/lib/apiConfig";
+import { DynamicForm } from "@/components/dynamic-form";
 
 export default function CreateProductPage() {
   const { toast } = useToast();
   const [supplierId, setSupplierId] = useState<string>("");
+  const [categorySlug, setCategorySlug] = useState<string>("");
   const [productData, setProductData] = useState({
     name: "",
     slug: "",
@@ -33,6 +35,24 @@ export default function CreateProductPage() {
     images: "",
     is_active: true,
   });
+
+  const suppliers = suppliersData?.data ?? [];
+  const categories = categoriesData?.data ?? [];
+  useEffect(() => {
+    if (productData.category_id && categories && categories.length > 0) {
+      const selectedCategory = categories.find((c: any) => c.id.toString() === productData.category_id);
+      if (selectedCategory) {
+        setCategorySlug(selectedCategory.slug || selectedCategory.name?.toLowerCase() || "");
+      }
+    } else {
+      setCategorySlug("");
+    }
+  }, [productData.category_id, categories]);
+
+  // Handler for dynamic form field changes
+  const handleDynamicFieldChange = (field: string, value: any) => {
+    setProductData({ ...productData, [field]: value });
+  };
 
   // Fetch active suppliers
   const { data: suppliersData } = useQuery({
@@ -120,9 +140,6 @@ export default function CreateProductPage() {
       .replace(/(^-|-$)/g, "");
     setProductData({ ...productData, slug });
   };
-
-  const suppliers = suppliersData?.data ?? [];
-  const categories = categoriesData?.data ?? [];
 
   const isValid =
     supplierId &&
@@ -358,6 +375,17 @@ export default function CreateProductPage() {
                 </Select>
               </CardContent>
             </Card>
+
+            {/* Dynamic Category Fields - Shows when category is selected */}
+            {productData.category_id && (
+              <DynamicForm
+                categoryId={productData.category_id}
+                categorySlug={categorySlug}
+                formData={productData}
+                onChange={handleDynamicFieldChange}
+                showBaseFields={false}
+              />
+            )}
 
             {/* Submit */}
             <Button

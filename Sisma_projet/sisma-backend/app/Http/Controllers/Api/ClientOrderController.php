@@ -184,4 +184,54 @@ class ClientOrderController extends Controller
             ]
         ]);
     }
+
+    /**
+     * Cancel order by client
+     * POST /api/client/orders/{id}/cancel
+     */
+    public function cancel(Request $request, $id)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Non authentifié'], 401);
+        }
+
+        $order = DB::table('orders')->where('id', (int)$id)->first();
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Commande introuvable'], 404);
+        }
+        
+        if (!$this->policy->canClientAccessOrder($user, $order)) {
+            return response()->json(['success' => false, 'message' => 'Accès refusé à cette commande'], 403);
+        }
+
+        // Only allow cancellation of pending orders
+        if (!in_array($order->status, ['pending', 'processing'])) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Impossible d\'annuler cette commande. Elle est déjà en cours de traitement ou livrée.'
+            ], 400);
+        }
+
+        // Validate reason
+        $reason = $request->input('reason', 'Annulé par le client');
+
+        // Update order status
+        DB::table('orders')->where('id', (int)$id)->update([
+            'status' => 'cancelled',
+            'cancellation_reason' => $reason,
+            'cancelled_at' => now(),
+            'cancelled_by' => $user->id,
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Commande annulée avec succès',
+            'data' => [
+                'order_id' => (int)$id,
+                'status' => 'cancelled',
+            ]
+        ]);
+    }
 }

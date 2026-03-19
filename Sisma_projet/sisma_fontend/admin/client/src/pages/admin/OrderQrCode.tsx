@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { QrCode, Search, Check, X, RefreshCw, Camera, CameraOff } from "lucide-react";
+import { useLocation } from "wouter";
+import { QrCode, Search, Check, X, RefreshCw, ArrowLeft, Package } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { getAuthHeaders, buildApiUrl } from "@/lib/apiConfig";
+import { Link } from "wouter";
 
 interface OrderQR {
   order_id: number;
@@ -21,10 +23,16 @@ interface OrderQR {
 
 export default function OrderQrCodePage() {
   const { toast } = useToast();
-  const [orderId, setOrderId] = useState<string>("");
+  const [location] = useLocation();
+  
+  // Get order ID from URL query parameter
+  const searchParams = new URLSearchParams(location.split("?")[1] || "");
+  const initialOrderId = searchParams.get("id") || "";
+  
+  const [orderId, setOrderId] = useState<string>(initialOrderId);
   const [qrData, setQrData] = useState<string>("");
 
-  // Get QR code for order
+  // Fetch QR code for order
   const { data: qrDataResponse, isLoading: isLoadingQR, refetch: refetchQR } = useQuery<{
     success: boolean;
     data: OrderQR;
@@ -95,9 +103,33 @@ export default function OrderQrCodePage() {
 
   const order = qrDataResponse?.data;
 
+  // Auto-fetch when orderId is provided from URL
+  useEffect(() => {
+    if (initialOrderId && !orderId) {
+      setOrderId(initialOrderId);
+    }
+  }, [initialOrderId]);
+
+  // Trigger fetch when orderId changes from URL
+  useEffect(() => {
+    if (orderId && orderId !== initialOrderId) {
+      refetchQR();
+    }
+  }, [orderId]);
+
   return (
     <Layout>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 max-w-4xl">
+        {/* Back Button & Header */}
+        <div className="flex items-center gap-4 mb-6">
+          <Link href="/admin/orders">
+            <Button variant="ghost" size="sm" className="gap-1">
+              <ArrowLeft className="h-4 w-4" />
+              Retour aux commandes
+            </Button>
+          </Link>
+        </div>
+
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-purple-100 rounded-full">
             <QrCode className="h-8 w-8 text-purple-600" />
@@ -120,11 +152,22 @@ export default function OrderQrCodePage() {
                   placeholder="ID de la commande..."
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && refetchQR()}
                 />
-                <Button onClick={() => refetchQR()}>
-                  <Search className="h-4 w-4" />
+                <Button onClick={() => refetchQR()} disabled={!orderId || isLoadingQR}>
+                  {isLoadingQR ? (
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Search className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
+
+              {isLoadingQR && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500"></div>
+                </div>
+              )}
 
               {order && (
                 <div className="space-y-4 pt-4 border-t">

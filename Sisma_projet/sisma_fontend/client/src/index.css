@@ -8,9 +8,14 @@
   --font-display: 'Outfit', sans-serif;
   --font-body: 'DM Sans', sans-serif;
 
-  /* FAT' SHOP : Magenta / Fuchsia Primary */
-  --primary: 330 90% 55%;
+  /* SISMA : Red #D81918 / Orange #F7941D */
+  --primary: 0 80% 50%;       /* Red #D81918 */
+  --primary-hover: 0 80% 45%;
   --primary-foreground: 0 0% 100%;
+  
+  --secondary: 36 90% 56%;    /* Orange #F7941D */
+  --secondary-hover: 36 90% 50%;
+  --secondary-foreground: 0 0% 100%;
   
   --background: 0 0% 100%;
   --foreground: 0 0% 10%;
@@ -20,7 +25,7 @@
   
   --border: 0 0% 90%;
   --input: 0 0% 90%;
-  --ring: 330 90% 55%;
+  --ring: 0 80% 50%;
   
   --card: 0 0% 100%;
   --card-foreground: 0 0% 10%;
@@ -31,16 +36,16 @@
   --secondary: 0 0% 96%;
   --secondary-foreground: 0 0% 10%;
   
-  --accent: 330 90% 96%;
-  --accent-foreground: 330 90% 40%;
+  --accent: 36 90% 96%;       /* Light orange tint */
+  --accent-foreground: 0 80% 50%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
   --radius: 0.75rem;
 
-  /* Dégradé maquette FAT' SHOP */
-  --gradient-fat: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #6366f1 100%);
+  /* SISMA gradient */
+  --gradient-sisma: linear-gradient(135deg, #D81918 0%, #F7941D 100%);
 }
 
 @layer base {
@@ -78,6 +83,90 @@
   .safe-padding-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+}
+
+/* SISMA Custom Styles */
+
+/* Primary Button - Red */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-medium text-white transition-all duration-200;
+  background-color: #D81918;
+}
+.btn-primary:hover {
+  background-color: #c01616;
+  @apply shadow-lg;
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Secondary Button - Orange */
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-medium text-white transition-all duration-200;
+  background-color: #F7941D;
+}
+.btn-secondary:hover {
+  background-color: #e8850e;
+  @apply shadow-lg;
+}
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Outline Button */
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-medium border-2 transition-all duration-200;
+  border-color: #D81918;
+  color: #D81918;
+  background: transparent;
+}
+.btn-outline:hover {
+  background-color: #D81918;
+  color: white;
+}
+
+/* Product Card */
+.product-card {
+  @apply bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  border: 1px solid #e5e5e5;
+}
+.product-card:hover {
+  border-color: #D81918;
+}
+
+/* Badge */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+.badge-sale {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+.badge-new {
+  background-color: #D81918;
+  color: white;
+}
+.badge-outofstock {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+/* Input */
+.input-field {
+  @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200 outline-none;
+}
+.input-field::placeholder {
+  @apply text-gray-400;
+}
+
+/* Section spacing */
+.section-spacing {
+  @apply py-8 md:py-12 lg:py-16;
+}
+
+/* Container */
+.container-main {
+  @apply max-w-7xl mx-auto px-3 sm:px-4 lg:px-6;
 }
 
 /* Custom Scrollbar */

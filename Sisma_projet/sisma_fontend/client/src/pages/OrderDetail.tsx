@@ -1,5 +1,5 @@
 import { Link, useRoute } from "wouter";
-import { ChevronRight, Package, MapPin, Phone, CalendarDays, QrCode, UserPlus, Shield, History, RotateCcw, X, Check, Clock, CheckCircle, XCircle } from "lucide-react";
+import { ChevronRight, Package, MapPin, Phone, CalendarDays, QrCode, UserPlus, Shield, History, RotateCcw, X, Check, Clock, CheckCircle, XCircle, Star, Send } from "lucide-react";
 import { useOrder } from "@/hooks/use-orders";
 import { useAuth } from "@/context/ClientAuthContext";
 import { PageLoader } from "@/components/Loader";
@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCreateReturn, RETURN_REASONS } from "@/hooks/use-returns";
 import { getReturnRequest, saveReturnRequest, type ReturnRequest } from "@/lib/returns";
+import { buildApiUrl, getApiHeaders } from "@/lib/apiConfig";
 
 const STATUS_LABELS: Record<string, string> = {
   pending: "En attente",
@@ -54,6 +55,67 @@ export default function OrderDetail() {
   const [returnRequest, setReturnRequest] = useState<ReturnRequest | null>(() =>
     id ? getReturnRequest(id) : null
   );
+
+  // Rating state
+  const [rating, setRating] = useState(0);
+  const [ratingComment, setRatingComment] = useState("");
+  const [ratingLoading, setRatingLoading] = useState(false);
+  const [hasRated, setHasRated] = useState(false);
+
+  // Check if order is delivered
+  const isDelivered = order?.status?.toLowerCase() === "delivered" || 
+                     order?.status?.toLowerCase() === "livree" || 
+                     order?.status?.toLowerCase() === "completed";
+
+  // Get supplier ID from order
+  const getSupplierId = () => {
+    // Try to get from order directly
+    const orderAny = order as any;
+    if (orderAny.supplier_id) return orderAny.supplier_id;
+    // Try from first item
+    if (order.items && order.items.length > 0) {
+      const firstItem = order.items[0] as any;
+      if (firstItem.supplier_id) return firstItem.supplier_id;
+    }
+    return null;
+  };
+
+  // Submit rating function
+  const submitRating = async () => {
+    const supplierId = getSupplierId();
+    if (!supplierId) {
+      toast({ title: "Erreur", description: "Aucun fournisseur trouvé pour cette commande", variant: "destructive" });
+      return;
+    }
+    if (rating === 0) {
+      toast({ title: "Erreur", description: "Veuillez sélectionner une note", variant: "destructive" });
+      return;
+    }
+
+    setRatingLoading(true);
+    try {
+      const response = await fetch(buildApiUrl(`/v1/shops/${supplierId}/reviews`), {
+        method: "POST",
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          rating,
+          comment: ratingComment || undefined,
+          order_id: id,
+        }),
+      });
+      const data = await response.json();
+      if (data.id || data.success) {
+        setHasRated(true);
+        toast({ title: "Merci !", description: "Votre avis a été enregistré" });
+      } else {
+        throw new Error(data.message || "Erreur lors de l'envoi");
+      }
+    } catch (err: any) {
+      toast({ title: "Erreur", description: err.message || "Impossible d'enregistrer votre avis", variant: "destructive" });
+    } finally {
+      setRatingLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -338,6 +400,74 @@ export default function OrderDetail() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Rating Section - Only show when delivered */}
+        {isDelivered && !hasRated && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Star className="w-5 h-5 text-amber-600" />
+              <span className="font-semibold text-gray-900">Noter ce fournisseur</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Comment évaluez-vous votre expérience avec ce fournisseur ?
+            </p>
+            <div className="flex justify-center gap-2 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className="p-1 transition-transform hover:scale-110"
+                >
+                  <Star 
+                    className={`w-8 h-8 ${
+                      star <= rating 
+                        ? "fill-amber-400 text-amber-400" 
+                        : "text-gray-300"
+                    }`} 
+                  />
+                </button>
+              ))}
+            </div>
+            <textarea
+              placeholder="Votre commentaire (optionnel)"
+              value={ratingComment}
+              onChange={(e) => setRatingComment(e.target.value)}
+              className="w-full p-3 text-sm border border-gray-200 rounded-lg mb-3 resize-none"
+              rows={3}
+            />
+            <button
+              onClick={submitRating}
+              disabled={rating === 0 || ratingLoading}
+              className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${
+                rating === 0 || ratingLoading 
+                  ? "bg-gray-300 cursor-not-allowed" 
+                  : "bg-amber-500 hover:bg-amber-600"
+              }`}
+            >
+              {ratingLoading ? (
+                "Envoi en cours..."
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <Send className="w-4 h-4" />
+                  Envoyer ma note
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Already rated message */}
+        {isDelivered && hasRated && (
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <span className="font-semibold text-green-800">Merci pour votre avis !</span>
+            </div>
+            <p className="text-sm text-green-700 mt-1">
+              Vous avez noté ce fournisseur {rating} étoile{rating > 1 ? 's' : ''}
+            </p>
           </div>
         )}
 

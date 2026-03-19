@@ -1,301 +1,149 @@
-import type { Product, Category } from "@shared/schema";
-import { Link, useLocation } from "wouter";
-import { useCart } from "@/hooks/use-cart";
-import { hasRequiredVariants } from "@/data/variants";
-import { ShoppingBag, Eye, Share2, Tag, Zap, Star } from "lucide-react";
-import { motion } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect, useRef } from "react";
-import { FaWhatsapp, FaTiktok, FaFacebook } from "react-icons/fa";
-import { SponsoredBadge } from "@/components/SponsoredBadge";
-import { ProductShopLink } from "@/components/ProductShopLink";
-import { trackSponsoredClick, useSponsoredImpression } from "@/hooks/use-sponsored-tracking";
+import { Link } from "wouter";
+import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
 
-interface ProductCardProps {
-  product: Product & { category?: Category; discountPercentage?: number };
+interface Product {
+  id: number;
+  name: string;
+  slug?: string;
+  price: number;
+  compare_price?: number;
+  image?: string;
+  images?: string[];
+  rating?: number;
+  review_count?: number;
+  supplier_name?: string;
+  category_name?: string;
+  is_new?: boolean;
+  discount?: number;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
-  const addItem = useCart((state) => state.addItem);
-  const { toast } = useToast();
-  const [showShareMenu, setShowShareMenu] = useState(false);
-  const shareMenuRef = useRef<HTMLDivElement>(null);
-  const [, setLocation] = useLocation();
+interface ProductCardProps {
+  product: Product;
+  onAddToCart?: (product: Product) => void;
+  onAddToWishlist?: (product: Product) => void;
+}
 
-  // Calcul du prix réduit (support discount ou discountPercentage)
-  const discount = (product as any).discount || (product as any).discountPercentage || 0;
-  const hasDiscount = discount > 0;
-  const discountedPrice = hasDiscount
-    ? Math.round(product.price * (1 - discount / 100))
-    : product.price;
-  const rating = Number((product as any).rating || (product as any).averageRating || 0);
-  const reviewCount = Number((product as any).reviewCount || (product as any).reviews_count || 0);
-  const campaignId = Number((product as any).sponsored_campaign_id || (product as any).campaign_id || 0) || undefined;
-  const isSponsored = Boolean((product as any).is_sponsored || campaignId);
-  const impressionRef = useSponsoredImpression(campaignId, product.id);
-  const trackClick = () => trackSponsoredClick(campaignId, product.id);
-
-  // Fermer le menu si on clique en dehors
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
-        setShowShareMenu(false);
-      }
-    };
-
-    if (showShareMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showShareMenu]);
-
-  const needsVariants = hasRequiredVariants(product as { colors?: string[]; sizes?: string[] });
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (needsVariants) return;
-    trackClick();
-    addItem(product);
-    toast({
-      title: "Ajouté au panier",
-      description: `${product.name} a été ajouté.`,
-      duration: 2000,
-    });
-  };
-
-  // Achat rapide - ajoute au panier et redirige vers checkout
-  const handleBuyNow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (needsVariants) {
-      setLocation(`/product/${product.id}`);
-      return;
-    }
-    trackClick();
-    addItem(product);
-    setLocation("/checkout");
-    toast({
-      title: "Redirection vers le paiement",
-      description: `${product.name} - ${discountedPrice.toLocaleString("fr-FR")} FCA`,
-      duration: 2000,
-    });
-  };
-
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/product/${product.id}` : "";
-  const shareText = `Découvrez ${product.name} sur SISMA Marketplace - ${discountedPrice.toLocaleString("fr-FR")} FCFA${hasDiscount ? ` (${discount}% de réduction!)` : ""}`;
-
-  const handleShare = (platform: "whatsapp" | "facebook" | "tiktok") => {
-    let url = "";
-    
-    switch (platform) {
-      case "whatsapp":
-        url = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
-        break;
-      case "facebook":
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
-        break;
-      case "tiktok":
-        // TikTok n'a pas de partage direct, on copie le lien
-        navigator.clipboard.writeText(shareUrl);
-        toast({
-          title: "Lien copié !",
-          description: "Le lien du produit a été copié dans le presse-papiers.",
-          duration: 2000,
-        });
-        setShowShareMenu(false);
-        return;
-    }
-    
-    window.open(url, "_blank", "width=600,height=400");
-    setShowShareMenu(false);
-  };
+export function ProductCard({ product, onAddToCart, onAddToWishlist }: ProductCardProps) {
+  const imageUrl = product.image || product.images?.[0] || "/placeholder.png";
+  const hasDiscount = product.compare_price && product.compare_price > product.price;
+  const discountPercent = hasDiscount 
+    ? Math.round(((product.compare_price! - product.price) / product.compare_price!) * 100)
+    : 0;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      ref={impressionRef}
-      className="group bg-white rounded-2xl  overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 relative"
-    >
-      {/* Badge de réduction et sponsorisé */}
-      <div className="absolute top-3 left-3 right-3 z-20 flex justify-between items-start">
-        {isSponsored && <SponsoredBadge tone="light" />}
-        {hasDiscount && (
-          <div className="bg-red-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg ml-auto">
-            <Tag className="w-3 h-3" />
-            <span className="text-xs font-bold">-{discount}%</span>
-          </div>
-        )}
-      </div>
-
+    <div className="product-card group">
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
-        <img 
-          src={product.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=600"} 
-          alt={product.name}
-          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-        />
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        <Link href={`/products/${product.slug || product.id}`}>
+          <img
+            src={imageUrl}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </Link>
         
-        {/* Quick Actions avec partage */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-          <Link 
-            href={`/product/${product.id}`} 
-            onClick={trackClick}
-            className="p-3 bg-white text-gray-900 rounded-full hover:bg-primary hover:text-white transition-colors transform hover:scale-110"
-          >
-            <Eye className="w-5 h-5" />
-          </Link>
-          {needsVariants ? (
-            <Link
-              href={`/product/${product.id}`}
-              className="p-3 bg-white text-gray-900 rounded-full hover:bg-primary hover:text-white transition-colors transform hover:scale-110"
-              title="Choisir couleur et/ou taille"
-            >
-              <ShoppingBag className="w-5 h-5" />
-            </Link>
-          ) : (
-            <button 
-              onClick={handleAddToCart}
-              className="p-3 bg-white text-gray-900 rounded-full hover:bg-primary hover:text-white transition-colors transform hover:scale-110"
-            >
-              <ShoppingBag className="w-5 h-5" />
-            </button>
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {product.is_new && (
+            <span className="badge badge-new">Nouveau</span>
           )}
-          
-          {/* Bouton Achat Rapide (Buy Now) */}
-          {!needsVariants && (
-            <button 
-              onClick={handleBuyNow}
-              className="p-3 bg-primary text-white rounded-full hover:bg-red-700 transition-colors transform hover:scale-110 shadow-lg"
-              title="Acheter maintenant"
-            >
-              <Zap className="w-5 h-5" />
-            </button>
+          {hasDiscount && (
+            <span className="badge badge-sale">-{discountPercent}%</span>
           )}
-          
-          {/* Bouton partage */}
-          <div className="relative" ref={shareMenuRef}>
-            <button
-              onClick={() => setShowShareMenu(!showShareMenu)}
-              className="p-3 bg-white text-gray-900 rounded-full hover:bg-primary hover:text-white transition-colors transform hover:scale-110"
-            >
-              <Share2 className="w-5 h-5" />
-            </button>
-
-            {/* Menu de partage */}
-            {showShareMenu && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="absolute right-0 top-14 bg-white rounded-xl shadow-2xl border border-gray-100 p-2 min-w-[180px] z-20"
-              >
-                <button
-                  onClick={() => handleShare("whatsapp")}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-50 transition-colors text-left"
-                >
-                  <FaWhatsapp className="w-5 h-5 text-[#25D366]" />
-                  <span className="text-sm font-medium text-gray-700">WhatsApp</span>
-                </button>
-                <button
-                  onClick={() => handleShare("facebook")}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-50 transition-colors text-left"
-                >
-                  <FaFacebook className="w-5 h-5 text-[#1877F2]" />
-                  <span className="text-sm font-medium text-gray-700">Facebook</span>
-                </button>
-                <button
-                  onClick={() => handleShare("tiktok")}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors text-left"
-                >
-                  <FaTiktok className="w-5 h-5 text-black" />
-                  <span className="text-sm font-medium text-gray-700">Copier le lien</span>
-                </button>
-              </motion.div>
-            )}
-          </div>
         </div>
 
-        {/* Badge catégorie */}
-        {product.category && (
-          <span
-            className={`absolute ${isSponsored ? "top-12" : "top-3"} left-3 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider text-gray-800`}
+        {/* Quick Actions - Appears on hover */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {onAddToWishlist && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                onAddToWishlist(product);
+              }}
+              className="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
+              aria-label="Ajouter à la wishlist"
+            >
+              <Heart className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
+          <Link
+            href={`/products/${product.slug || product.id}`}
+            className="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
+            aria-label="Voir le produit"
           >
-            {product.category.name}
-          </span>
+            <Eye className="w-4 h-4 text-gray-600" />
+          </Link>
+        </div>
+
+        {/* Add to Cart Button - Mobile & Desktop */}
+        {onAddToCart && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              onAddToCart(product);
+            }}
+            className="absolute bottom-3 left-3 right-3 bg-sisma-red text-white py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-sisma-redHover translate-y-2 group-hover:translate-y-0"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Ajouter au panier
+          </button>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <Link href={`/product/${product.id}`} onClick={trackClick} className="block">
-          <h3 className="font-display font-semibold text-lg text-gray-900 mb-1 group-hover:text-primary transition-colors line-clamp-1">
+      {/* Product Info */}
+      <div className="p-4">
+        {/* Category */}
+        {product.category_name && (
+          <p className="text-xs text-gray-500 mb-1">{product.category_name}</p>
+        )}
+
+        {/* Name */}
+        <Link href={`/products/${product.slug || product.id}`}>
+          <h3 className="font-medium text-gray-900 line-clamp-2 min-h-[2.5rem] hover:text-sisma-red transition-colors">
             {product.name}
           </h3>
         </Link>
-        <ProductShopLink
-          product={product}
-          showIcon
-          className="mb-1.5 text-xs text-gray-500 hover:text-primary"
-        />
-        {rating > 0 && (
-          <div className="flex items-center gap-1 text-xs text-gray-500">
-            <div className="flex items-center gap-0.5">
-              {[1, 2, 3, 4, 5].map((i) => (
+
+        {/* Rating */}
+        {product.rating && (
+          <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center">
+              {[1, 2, 3, 4, 5].map((star) => (
                 <Star
-                  key={i}
-                  className="w-3 h-3"
-                  fill={i <= Math.round(rating) ? "#f59e0b" : "none"}
-                  stroke={i <= Math.round(rating) ? "#f59e0b" : "#d1d5db"}
+                  key={star}
+                  className={`w-3.5 h-3.5 ${
+                    star <= Math.round(product.rating!)
+                      ? "fill-amber-400 text-amber-400"
+                      : "text-gray-300"
+                  }`}
                 />
               ))}
             </div>
-            {reviewCount > 0 && <span>({reviewCount})</span>}
+            <span className="text-xs text-gray-500">
+              ({product.review_count || 0})
+            </span>
           </div>
         )}
-        <div className="flex items-baseline justify-between mt-2 gap-2">
-          <div className="flex flex-col">
-            {hasDiscount ? (
-              <>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-xl text-primary">
-                    {discountedPrice.toLocaleString('fr-FR')} FCFA
-                  </span>
-                </div>
-                <span className="text-sm text-gray-500 line-through">
-                  {product.price.toLocaleString('fr-FR')} FCFA
-                </span>
-              </>
-            ) : (
-              <span className="font-bold text-xl text-primary">
-                {product.price.toLocaleString('fr-FR')} FCFA
-              </span>
-            )}
-          </div>
-        </div>
 
-        {/* Bouton Commander directement */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          {needsVariants ? (
-            <Link href={`/product/${product.id}`}>
-              <button className="w-full bg-primary text-white py-2.5 px-4 rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group">
-                <Zap className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                Choisir options
-              </button>
-            </Link>
-          ) : (
-            <button
-              onClick={handleBuyNow}
-              className="w-full bg-primary text-white py-2.5 px-4 rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group"
-            >
-              <Zap className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              Acheter maintenant
-            </button>
+        {/* Supplier */}
+        {product.supplier_name && (
+          <p className="text-xs text-gray-500 mt-1">{product.supplier_name}</p>
+        )}
+
+        {/* Price */}
+        <div className="flex items-center gap-2 mt-3">
+          <span className="text-lg font-bold text-sisma-red">
+            {product.price.toLocaleString("fr-FR")} €
+          </span>
+          {hasDiscount && (
+            <span className="text-sm text-gray-400 line-through">
+              {product.compare_price?.toLocaleString("fr-FR")} €
+            </span>
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
+
+export default ProductCard;
